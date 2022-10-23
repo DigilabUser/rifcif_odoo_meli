@@ -10,7 +10,10 @@
     'depends': ['sale_management'],
     'summary': 'Este modulo brinda una integración de odoo con MercadoLibre Chile',
     'description': '',
-    'data': ['views/assets_backend.xml'],
+    'data': [
+        'views/assets_backend.xml',
+        'views/product_template.xml'
+    ],
     'qweb': ['static/src/xml/template.xml'],
     'images': [],
     'installable': True,
