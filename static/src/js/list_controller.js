@@ -12,15 +12,20 @@ odoo.define('rifcif_odoo_meli.JsToCallWizard', function (require) {
         }
       },
       action_to_sync_meli: function(event) {
+        console.log("PROBANDO ")
         event.preventDefault();
         var self = this;
         var rpc = require('web.rpc');
-
+        console.log("Paso 2")
         rpc.query({
                     model: 'product.template',
                     method: 'testing_python',
-                    args: []
-                }).then(function (returned_value) { console.log("Todo") } )   
+                    args: [{
+
+                      'arg1': "value1",
+
+              }]
+                }).then(function () { console.log("Todo") } )   
       },
     });
     });

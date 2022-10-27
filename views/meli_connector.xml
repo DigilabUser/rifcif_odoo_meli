@@ -1,0 +1,47 @@
+<odoo>
+    <data>
+
+      	<record model="ir.ui.view" id="meli_connector_tree_view_id">
+			<field name="name">meli_connector_tree_view</field>
+			<field name="model">meli.connector</field>
+	        <field name="arch" type="xml">
+		       	<tree string="MeLi Connector">    
+			        <field name="name"/>
+			        <field name="client"/>
+                    <field name="key"/>
+			        <field name="token"/>
+	        	</tree>
+	   		</field>
+	   	</record>
+
+		<record model="ir.ui.view" id="meli_connector_form_view_id">
+			<field name="name">meli_connector_form_view</field>
+			<field name="model">meli.connector</field>
+			<field name="type">form</field>
+	     	<field name="arch" type="xml">
+		        <form string="MeLi Connector">
+		        	<header>
+		        		<button name="connect" string="Conectar" type="object"/>
+		        	</header>
+		       		<sheet>
+		       	  		<group>
+		      	   			<field name="name"/>
+		      	   			<field name="client"/>
+                            <field name="key"/>
+		      	   			<field name="token" readonly="1"/>
+		           		</group>
+		          	</sheet>
+	       		</form>
+	   	 	</field>
+	    </record>
+
+        <record model="ir.actions.act_window" id="action_ml_connector">
+	    	<field name="name">MercadoLibre Connector</field>
+	      	<field name="res_model">meli.connector</field>
+	      	<field name="view_mode">tree,form</field>
+	    </record>
+
+        <menuitem id="ml_connector_root" name="MeLi Connector"/>
+        <menuitem name="ML Connector" id="menu_ml_connector" action="action_ml_connector" parent="ml_connector_root" sequence="1"/>
+    </data>
+</odoo>

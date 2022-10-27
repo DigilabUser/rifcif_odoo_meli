@@ -7,12 +7,14 @@
     'Luis Enrique Alva Villena <luis.alva@digilab.pe>',
     'Diego Alonso Alva Vela <diego.alva@digilab.pe>'
     ],
-    'depends': ['sale_management'],
+    'depends': ['sale_management', 'stock'],
     'summary': 'Este modulo brinda una integración de odoo con MercadoLibre Chile',
     'description': '',
     'data': [
+        'security/ir.model.access.csv',
         'views/assets_backend.xml',
-        'views/product_template.xml'
+        'views/product_template.xml',
+        'views/meli_connector.xml',
     ],
     'qweb': ['static/src/xml/template.xml'],
     'images': [],

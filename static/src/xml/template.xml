@@ -3,7 +3,7 @@
     <t t-extend="ListView.buttons">
         <t t-jquery="button.o_list_button_add" t-operation="after">
             <t t-if="widget.modelName == 'product.template'">
-            <button name="testing_python" type="button" class="btn btn-warning o_button_to_sync_meli" icon="/rifcif_odoo_meli/static/src/img/meli_logo_4.png">Sincronizar MercadoLibre</button>
+            <button name="testing_python" type="object" class="btn btn-warning o_button_to_sync_meli">Sincronizar MercadoLibre</button>
            </t>
         </t>
     </t>
