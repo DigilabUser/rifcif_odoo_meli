@@ -13,7 +13,26 @@
 	        	</tree>
 	   		</field>
 	   	</record>
-
+      	<record model="ir.ui.view" id="meli_sales_tree_view_id">
+			<field name="name">meli_sales_tree_view</field>
+			<field name="model">meli.sales</field>
+	        <field name="arch" type="xml">
+		       	<tree string="MeLi sales">    
+			        <field name="meli_order_id"/>
+			        <field name="meli_item_id"/>
+			        <field name="meli_shipping_id"/>
+					<field name="date_created"/>
+					<field name="date_closed"/>
+					<field name="date_updated"/>
+					<field name="total_amount"/>
+					<field name="paid_amount"/>
+					<field name="status"/>
+					<field name="buyer_nickname"/>
+			        <field name="logistic_type" decoration-warning="logistic_type == 'notfull'" decoration-success="logistic_type == 'full'"/>
+					<!-- <field name="buyer_name"/> -->
+	        	</tree>
+	   		</field>
+	   	</record>
 		<record model="ir.ui.view" id="meli_connector_form_view_id">
 			<field name="name">meli_connector_form_view</field>
 			<field name="model">meli.connector</field>
@@ -34,14 +53,90 @@
 	       		</form>
 	   	 	</field>
 	    </record>
+		<record model="ir.ui.view" id="meli_sales_form_view_id">
+			<field name="name">meli_sales_form_view</field>
+			<field name="model">meli.sales</field>
+			<field name="type">form</field>
+	     	<field name="arch" type="xml">
+		        <form string="MeLi sales">
+		       		<sheet>
+		       	  		<group>
+							<group>
+								<field name="meli_order_id"/>
+						        <!-- <field name="meli_shipping_id"/> -->
+								<field name="logistic_type" decoration-warning="logistic_type == 'notfull'" decoration-success="logistic_type == 'full'"/>		
+								<field name="buyer_nickname"/>
+								<field name="buyer_name"/>
+									
+								<field name="status"/>
+							</group>
+							<group>
+								<field name="date_created"/>
+								<field name="date_closed"/>
+								<field name="date_updated"/>
+								<field name="total_amount"/>
+								<field name="paid_amount"/>
+							</group>
+
+		           		</group>
+					<notebook>
+						<page name="shipping" string="Detalles de envío">
+							<group>
+								<group>
+									<field name="sh_shipping_id" />								
+									<field name="sh_logistic_type" decoration-warning="logistic_type == 'notfull'" decoration-success="logistic_type == 'full'"/>								
+									<field name="sh_status" />								
+									<field name="sh_tracking_method" />								
+								</group>	
+								<group>
+									<field name="sh_country" />														
+									<field name="sh_city" />														
+									<field name="sh_address_line" />														
+									<field name="sh_receiver_name" />														
+																					
+									<field name="sh_geolocation_map" widget ="url"/>														
+								</group>									
+							</group>
+							<field name="sh_comment" />		
+						</page>
+						<page name="items" string="Detalle del libro">
+							<group>
+								<group>
+									<field name="it_image" widget="image" class=" oe_left" nolabel="1"/>
+								</group>
+								<group>
+									<field name="meli_item_id"/>
+									<field name="it_title"/>
+									<field name="it_category"/>
+									<field name="it_price"/>
+									<field name="it_initial_quantity"/>
+									<field name="it_available_quantity"/>
+									<field name="it_sold_quantity"/>
+									<field name="it_condition"/>
+									<field name="it_warranty"/>
+								</group>
+							</group>
+						</page>
+					</notebook>							
+		          	</sheet>
+			
+	       		</form>
+	   	 	</field>
+	    </record>		
 
         <record model="ir.actions.act_window" id="action_ml_connector">
 	    	<field name="name">MercadoLibre Connector</field>
 	      	<field name="res_model">meli.connector</field>
 	      	<field name="view_mode">tree,form</field>
 	    </record>
+        <record model="ir.actions.act_window" id="action_ml_ventas">
+	    	<field name="name">MercadoLibre Ventas</field>
+	      	<field name="res_model">meli.sales</field>
+	      	<field name="view_mode">tree,form</field>
+	    </record>		
 
         <menuitem id="ml_connector_root" name="MeLi Connector"/>
         <menuitem name="ML Connector" id="menu_ml_connector" action="action_ml_connector" parent="ml_connector_root" sequence="1"/>
+        <menuitem name="ML Ventas" id="menu_ml_ventas" action="action_ml_ventas" parent="ml_connector_root" sequence="2"/>
     </data>
 </odoo>

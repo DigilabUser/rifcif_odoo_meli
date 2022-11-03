@@ -1,3 +1,4 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_prod_temp_inherit_admin,access.product.template.inherit.admin,model_product_template,,1,1,1,1
 access_meli_connector_admin,access.meli.connector.admin,model_meli_connector,,1,1,1,1
+access_meli_sales_admin,access.meli.sales.admin,model_meli_sales,,1,1,1,1

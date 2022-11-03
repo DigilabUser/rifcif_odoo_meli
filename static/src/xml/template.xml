@@ -6,5 +6,10 @@
             <button name="testing_python" type="object" class="btn btn-warning o_button_to_sync_meli">Sincronizar MercadoLibre</button>
            </t>
         </t>
+        <t t-jquery="button.o_list_button_add" t-operation="after">
+            <t t-if="widget.modelName == 'meli.sales'">
+            <button name="testing_python" type="object" class="btn btn-warning o_button_to_sync_meli_ventas">Sincronizar MercadoLibre</button>
+           </t>
+        </t>                 
     </t>
 </template>

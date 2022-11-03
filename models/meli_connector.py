@@ -3,6 +3,7 @@
 from odoo import models, fields, api
 import requests
 import json
+from odoo.exceptions import ValidationError
 
 class MkConnector(models.Model):
     _name = 'meli.connector'
@@ -13,10 +14,12 @@ class MkConnector(models.Model):
     token = fields.Char(string="Token")
 
     def connect(self):
-
-        CLIENT_ID = self.client
-        CLIENT_SECRET = self.key
-        url = 'https://api.mercadolibre.com/oauth/token?grant_type=client_credentials&client_id={}&client_secret={}'.format(CLIENT_ID, CLIENT_SECRET)
-        response = requests.post(url)
-        json_obj = json.loads(response.text)
-        self.token = json_obj['access_token']
+        try:
+            CLIENT_ID = self.client
+            CLIENT_SECRET = self.key
+            url = 'https://api.mercadolibre.com/oauth/token?grant_type=client_credentials&client_id={}&client_secret={}'.format(CLIENT_ID, CLIENT_SECRET)
+            response = requests.post(url)
+            json_obj = json.loads(response.text)
+            self.token = json_obj['access_token']
+        except ValueError:
+            raise ValidationError(ValueError)
