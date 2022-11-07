@@ -15,7 +15,7 @@
         'views/assets_backend.xml',
         'views/product_template.xml',
         'views/meli_connector.xml',
-        'views/settings_inherit.xml'
+        #'views/settings_inherit.xml'
     ],
     'qweb': ['static/src/xml/template.xml'],
     'images': [],
