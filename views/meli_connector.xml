@@ -26,6 +26,7 @@
 					<field name="date_updated"/>
 					<field name="total_amount"/>
 					<field name="paid_amount"/>
+					<field name="sh_status"/>
 					<field name="status"/>
 					<field name="buyer_nickname"/>
 			        <field name="logistic_type" decoration-warning="logistic_type == 'notfull'" decoration-success="logistic_type == 'full'"/>
@@ -59,6 +60,9 @@
 			<field name="type">form</field>
 	     	<field name="arch" type="xml">
 		        <form string="MeLi sales">
+					<header>
+						<button name="printticket" string="Imprimir Etiqueta" type="object" class="oe_highlight" attrs="{'invisible':['|',('sh_logistic_type', '!=', 'notfull'),('sh_status','!=','ready_to_ship')]}"/>
+					</header>				
 		       		<sheet>
 		       	  		<group>
 							<group>
@@ -86,7 +90,8 @@
 									<field name="sh_shipping_id" />								
 									<field name="sh_logistic_type" decoration-warning="logistic_type == 'notfull'" decoration-success="logistic_type == 'full'"/>								
 									<field name="sh_status" />								
-									<field name="sh_tracking_method" />								
+									<field name="sh_tracking_method" />	
+									<field name="sh_ticket" />							
 								</group>	
 								<group>
 									<field name="sh_country" />														
