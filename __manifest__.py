@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 {
     'name': 'Rifcif MELI Connector',
-    'version': '1.0.1',
+    'version': '1.0.2',
     'author': 'Ingenieria Rifcif SAC',
     'colaborators':[
     'Luis Enrique Alva Villena <luis.alva@digilab.pe>',

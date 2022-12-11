@@ -6,6 +6,7 @@ import json
 from odoo.exceptions import ValidationError
 import logging
 import base64
+import datetime
 from datetime import datetime
 from datetime import timedelta
 _logger = logging.getLogger(__name__)
@@ -20,12 +21,13 @@ SHIPMENTS_URI = ORDERS_URI + '/{}/shipments'
 #GET_ORDER = ORDERS_URI + '/search?seller={}&order.date_created.from=2022-11-09T00:00:00.000-00:00&order.date_created.to=2022-11-10T00:00:00.000-00:00&sort=date_desc'
 GET_ORDER = ORDERS_URI + '/search?seller={}&order.date_created.from={}&order.date_created.to={}&sort=date_desc'
 ALBERT_ID='422252521'
+PRINT_TICKET_URI = API_URI + '/shipment_labels?shipment_ids={}&response_type=pdf'
 
 class MkWizard(models.TransientModel):
     _name = 'meli.sales.wizard'
 
-    date_from = fields.Datetime('Fecha Inicial')
-    date_to = fields.Datetime('Fecha Final')
+    date_from = fields.Datetime('Fecha Inicial', default=datetime.now().replace(hour=00, minute=00, second=1)+timedelta(hours=3))
+    date_to = fields.Datetime('Fecha Final', default=datetime.now().replace(hour=23, minute=59, second=59)+timedelta(hours=3))
     def getImage(self, url):
         return base64.b64encode(requests.get(url).content)
 
@@ -129,3 +131,53 @@ class MkWizard(models.TransientModel):
             else:
                 qty_order.sudo().write(order_obj)
 
+
+class MkWizardMultiTicket(models.TransientModel):
+    _name = 'meli.multi.ticket.wizard'
+
+    def _get_default_tickets(self):
+        _logger.info("============================")
+        _logger.info(self._context.get('tickets',""))
+        _logger.info("============================")
+
+        return self._context.get('tickets',"")
+
+    meli_tickets = fields.Binary('Tickets Impresos')
+    meli_orders_ids = fields.Many2many('meli.sales', string='Ordenes Mercadolibre')
+
+    def printticket(self):
+        connector_obj = self.env['meli.connector'].search([])
+        for conn in connector_obj:
+            token = conn.token
+        header = {'Authorization': 'Bearer '+ token} 
+        str_tickets = ""  
+        for item in self.meli_orders_ids:
+            str_tickets += item.meli_shipping_id + ','
+        #Obtener el ticket
+        print_uri = PRINT_TICKET_URI.format(str_tickets)
+        _logger.info(print_uri)
+        response = requests.get(print_uri, headers=header)
+        _logger.info(response.status_code)        
+        # Save the PDF
+        if response.status_code == 200:
+            with open('prueba.pdf', "wb") as f:
+                f.write(response.content)
+                f.close()
+            file = open("prueba.pdf", "rb")
+            out = file.read()
+            file.close()
+            self.meli_tickets = base64.b64encode(out)
+           # context = "{'tickets':"+base64.b64encode(out)+"}"      
+        else:
+            print(response.status_code)
+           # context= ""
+        return {
+            #'context': context,
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'meli.multi.ticket.wizard',
+            'res_id': self.id,
+            'view_id': False,
+            'type': 'ir.actions.act_window',
+            'target': 'new',
+        }

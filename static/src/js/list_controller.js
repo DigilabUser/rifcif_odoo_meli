@@ -10,6 +10,7 @@ odoo.define('rifcif_odoo_meli.JsToCallWizard', function (require) {
 //          this.$buttons.on('click', '.o_button_to_sync_meli', this.action_to_sync_meli.bind(this));
 //          this.$buttons.on('click', '.o_button_to_sync_meli_ventas', this.action_to_sync_meli_ventas.bind(this));
           this.$buttons.on('click', '.o_button_to_sync_meli_ventas_dates', this.action_to_sync_meli_ventas_dates.bind(this));
+          this.$buttons.on('click', '.o_button_to_sync_meli_print_tickets', this.action_to_sync_meli_print_tickets.bind(this));
           this.$buttons.appendTo($node);
         }
       },
@@ -57,6 +58,19 @@ odoo.define('rifcif_odoo_meli.JsToCallWizard', function (require) {
           views: [[false, 'form']],
           target: 'new',
        }); 
-      },             
+      },   
+      action_to_sync_meli_print_tickets: function(event) {
+        event.preventDefault();
+        var self = this;
+        self.do_action({
+          name: "Imprimir Tickets",
+          type: 'ir.actions.act_window',
+          res_model: 'meli.multi.ticket.wizard',
+          view_mode: 'form',
+          view_type: 'form',
+          views: [[false, 'form']],
+          target: 'new',
+       }); 
+      },                  
     });
     });
