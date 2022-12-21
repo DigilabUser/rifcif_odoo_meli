@@ -87,3 +87,17 @@ class MkSales(models.Model):
         else:
             print(response.status_code)
         return response.content
+    
+    # def open_print_wizard(self):
+    #     return {
+    #         'name': "Imprimir Tickets Multiples",
+    #         'type': 'ir.actions.act_window',
+    #         'res_model': 'meli.multi.ticket.wizard',
+    #         'view_mode': 'form',
+    #         'view_type': 'form',
+    #         'views': [[False, 'form']],
+    #         'view_id': self.env.ref('rifcif_odoo_meli.meli_multi_ticket_wizard').id,
+    #         'target': 'new'
+    #     }     
+    #     for rec in self:
+    #         _logger.info(rec["meli_shipping_id"])

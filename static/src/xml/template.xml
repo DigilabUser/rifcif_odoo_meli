@@ -10,6 +10,13 @@
             <t t-if="widget.modelName == 'meli.sales'">
             <!-- <button name="testing_python" type="object" class="btn btn-warning o_button_to_sync_meli_ventas">Sincronizar MercadoLibre</button> -->
             <button name="openWizard" type="object" class="btn btn-info o_button_to_sync_meli_ventas_dates">Sincronizar MercadoLibre</button>
+            <button name="printTickets" type="object" class="btn btn-warning o_button_to_sync_meli_print_tickets">Imprimir Etiquetas</button>
+           </t>
+        </t>          
+        <t t-jquery="button.o_list_button_add" t-operation="after">
+            <t t-if="widget.modelName == 'meli.stock'">
+            <!-- <button name="testing_python" type="object" class="btn btn-warning o_button_to_sync_meli_ventas">Sincronizar MercadoLibre</button> -->
+            <button name="openWizard" type="object" class="btn btn-info o_button_to_sync_meli_stock">Sincronizar stock MercadoLibre</button>
            </t>
         </t>                 
     </t>

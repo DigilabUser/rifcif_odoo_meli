@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 {
     'name': 'Rifcif MELI Connector',
-    'version': '1.0.1',
+    'version': '1.0.3',
     'author': 'Ingenieria Rifcif SAC',
     'colaborators':[
     'Luis Enrique Alva Villena <luis.alva@digilab.pe>',
@@ -12,6 +12,7 @@
     'description': '',
     'data': [
         'security/ir.model.access.csv',
+        'security/ir.model.access.xml',
         'views/assets_backend.xml',
         'views/product_template.xml',
         'views/meli_connector.xml',

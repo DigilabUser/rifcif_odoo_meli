@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <odoo>
-
     <record id="meli_sales_wizard_view_form" model="ir.ui.view">
         <field name="name">meli.sales.wizard.form</field>
         <field name="model">meli.sales.wizard</field>
@@ -20,5 +19,28 @@
         </field>
     </record>
 
-
+    <record id="meli_multi_ticket_wizard" model="ir.ui.view">
+        <field name="name">meli.multi.ticket.wizard.form</field>
+        <field name="model">meli.multi.ticket.wizard</field>
+        <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group>
+                            <field name="meli_orders_ids" widget="many2many">
+                                <tree>
+                                    <field name="meli_shipping_id"/>
+            
+                                </tree>
+                            </field>                        
+                     
+                            <field name="meli_tickets" readonly="1"/>
+                        </group>
+                    </sheet>
+                <footer>
+                    <button name="printticket" type="object" string="Obtener Etiquetas" class="oe_highligth" />
+                    <button name="cancel" string="Cancelar" />
+                </footer>                    
+                </form>
+        </field>
+    </record>
 </odoo>
