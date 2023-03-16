@@ -16,6 +16,7 @@
         'views/assets_backend.xml',
         'views/product_template.xml',
         'views/meli_connector.xml',
+        'views/meli_orders.xml',
         'wizards/wizard.xml'
         #'views/settings_inherit.xml'
     ],

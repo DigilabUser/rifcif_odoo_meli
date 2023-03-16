@@ -12,6 +12,7 @@ odoo.define('rifcif_odoo_meli.JsToCallWizard', function (require) {
           this.$buttons.on('click', '.o_button_to_sync_meli_ventas_dates', this.action_to_sync_meli_ventas_dates.bind(this));
           this.$buttons.on('click', '.o_button_to_sync_meli_print_tickets', this.action_to_sync_meli_print_tickets.bind(this));
           this.$buttons.on('click', '.o_button_to_sync_meli_stock', this.action_to_sync_meli_stock.bind(this));
+          this.$buttons.on('click', '.o_button_to_sync_meli_order', this.action_to_sync_meli_order.bind(this));
           this.$buttons.appendTo($node);
         }
       },
@@ -31,6 +32,22 @@ odoo.define('rifcif_odoo_meli.JsToCallWizard', function (require) {
               }]
                 }).then(function () { console.log("Todo") } )   
       },
+      action_to_sync_meli_order: function(event) {
+        console.log("PROBANDO ")
+        event.preventDefault();
+        var self = this;
+        var rpc = require('web.rpc');
+        console.log("Paso 2")
+        rpc.query({
+                    model: 'meli.order',
+                    method: 'syncOrders',
+                    args: [{
+
+                      'arg1': "value1",
+
+              }]
+                }).then(function () { console.log("Todo") } )   
+      },      
       // action_to_sync_meli_ventas: function(event) {
       //   console.log("PROBANDO ")
       //   event.preventDefault();

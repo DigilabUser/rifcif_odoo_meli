@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+      	<record model="ir.ui.view" id="meli_order_tree_view_id">
+			<field name="name">meli_order_tree_view</field>
+			<field name="model">meli.order</field>
+	        <field name="arch" type="xml">
+		       	<tree string="MercadoLibre Ordenes">    
+			        <field name="meli_order_id"/>
+			        <field name="date_created"/>
+                    <field name="date_closed"/>
+			        <field name="total_amount"/>
+			        <field name="paid_amount"/>
+			        <field name="buyer_nickname"/>
+	        	</tree>
+	   		</field>
+	   	</record>
+      	<record model="ir.ui.view" id="meli_order_tree_view_id">
+			<field name="name">meli_order_tree_view</field>
+			<field name="model">meli.order</field>
+	        <field name="arch" type="xml">
+		       	<tree string="MercadoLibre Ordenes">    
+			        <field name="meli_order_id"/>
+			        <field name="date_created"/>
+                    <field name="date_closed"/>
+			        <field name="total_amount"/>
+			        <field name="paid_amount"/>
+			        <field name="buyer_nickname"/>
+	        	</tree>
+	   		</field>
+	   	</record>
+    
+
+        
+    
+    </data>
+</odoo>
