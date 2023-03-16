@@ -6,29 +6,24 @@
 			<field name="model">meli.order</field>
 	        <field name="arch" type="xml">
 		       	<tree string="MercadoLibre Ordenes">    
-			        <field name="meli_order_id"/>
-			        <field name="date_created"/>
-                    <field name="date_closed"/>
-			        <field name="total_amount"/>
-			        <field name="paid_amount"/>
-			        <field name="buyer_nickname"/>
+                    <field name="shipping_id"></field>
 	        	</tree>
 	   		</field>
 	   	</record>
-      	<record model="ir.ui.view" id="meli_order_tree_view_id">
-			<field name="name">meli_order_tree_view</field>
+		<record model="ir.ui.view" id="meli_order_form_view_id">
+			<field name="name">meli_order_form_view</field>
 			<field name="model">meli.order</field>
-	        <field name="arch" type="xml">
-		       	<tree string="MercadoLibre Ordenes">    
-			        <field name="meli_order_id"/>
-			        <field name="date_created"/>
-                    <field name="date_closed"/>
-			        <field name="total_amount"/>
-			        <field name="paid_amount"/>
-			        <field name="buyer_nickname"/>
-	        	</tree>
-	   		</field>
-	   	</record>
+			<field name="type">form</field>
+	     	<field name="arch" type="xml">
+		        <form string="MeLi order">
+		       		<sheet>
+		       	  		<group>
+                            <field name="shipping_id"></field>
+		           		</group>
+		          	</sheet>
+	       		</form>
+	   	 	</field>
+	    </record>
     
 
         
