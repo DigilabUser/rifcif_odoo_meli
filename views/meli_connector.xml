@@ -188,7 +188,12 @@
 	    	<field name="name">MercadoLibre órdenes</field>
 	      	<field name="res_model">meli.order</field>
 	      	<field name="view_mode">tree,form</field>
-	    </record>	
+	    </record>
+		<record model="ir.actions.act_window" id="action_ml_shipments">
+	    	<field name="name">MercadoLibre Envíos</field>
+	      	<field name="res_model">meli.shipments</field>
+	      	<field name="view_mode">tree,form</field>
+	    </record>				
 		<!-- <record id="multiple_print_tickets" model="ir.actions.server">
 		<field name="name">Imprimir Tickets</field>
 		<field name="type">ir.actions.server</field>
@@ -203,6 +208,7 @@
         <menuitem name="ML Connector" id="menu_ml_connector" action="action_ml_connector" parent="ml_connector_root" sequence="1"/>
         <menuitem name="ML Ventas" id="menu_ml_ventas" action="action_ml_ventas" parent="ml_connector_root" sequence="2"/>
 		<menuitem name="ML Stock" id="menu_ml_stock" action="action_ml_stock" parent="ml_connector_root" sequence="3"/>
-		<menuitem name="ML Order" id="menu_ml_order" action="action_ml_order" parent="ml_connector_root" sequence="4"/>
+		<menuitem name="ML Órdenes" id="menu_ml_order" action="action_ml_order" parent="ml_connector_root" sequence="4"/>
+		<menuitem name="ML Envíos" id="menu_ml_shipments" action="action_ml_shipments" parent="ml_connector_root" sequence="5"/>
     </data>
 </odoo>

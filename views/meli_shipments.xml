@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista Form -->
+    <record id="meli_shipments_view_form" model="ir.ui.view">
+        <field name="name">meli.shipments.view.form</field>
+        <field name="model">meli.shipments</field>
+        <field name="arch" type="xml">
+            <form string="MercadoLibre Envíos">
+                <sheet>
+                    <group>
+                        
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!-- Vista Tree -->
+    <record model="ir.ui.view" id="meli_shipments_tree_view_id">
+        <field name="name">meli_shipments_tree_view</field>
+        <field name="model">meli.shipments</field>
+        <field name="arch" type="xml">
+            <tree string="MercadoLibre Envíos">
+                
+            </tree>
+        </field>
+    </record>
+</odoo>
