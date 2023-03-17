@@ -40,7 +40,7 @@ class MercadolibreOrders(models.Model):
     seller_nickname = fields.Char('Nombre del vendedor')
     seller_id = fields.Char('Id del vendedor')
 
-    fulfilled = fields.Boolean('Cumplido') # Preguntar
+    fulfilled = fields.Boolean('Cumplido')
     buying_mode = fields.Char('Modo de compra')
     # Taxes
     taxes_amount = fields.Integer('Cantidad')
@@ -71,23 +71,17 @@ class MercadolibreOrders(models.Model):
     # Coupon
     coupon_amount= fields.Integer('Cantidad cupones')
     coupon_id = fields.Char('Id coupon')
+
     shipping_cost = fields.Float('Costo de envio')
 
     date_created = fields.Datetime('Fecha de creación')
     application_id = fields.Char('Id aplicación')
     pickup_id = fields.Char('Id recoger')
     status_detail = fields.Char('Estado detalle')
-    
-    # preguntar tags
-
-    buyer_name = fields.Char('Nombre comprador')
+    buyer_nickname = fields.Char('Nombre comprador')
     buyer_id = fields.Char('Id comprador')
     total_amount = fields.Integer('Cantidad total')
     paid_amount = fields.Float('Monto de pago')
-
-    # preguntar mediations
-
-    currency_id = fields.Char('Id divisa')
     status= fields.Char('Estado')
 
     def getImage(self, url):
@@ -153,7 +147,25 @@ class MercadolibreOrders(models.Model):
                     obj["feedback_sale"]=order["feedback"]["sale"]
                     obj["feedback_purchase"]=order["feedback"]["purchase"]
                     obj["shipping"]=order["shipping"]["id"]
-                    
+                    obj["date_closed"]=order["date_closed"]
+                    obj["manufacturing_ending_date"]=order["manufacturing_ending_date"]
+                    obj["hidden_for_seller"]=order["hidden_for_seller"]
+                    obj["date_last_updated"]=order["date_last_updated"]
+                    obj["last_updated"]=order["last_updated"]
+                    obj["comments"]=order["comments"]
+                    obj["pack_id"]=order["pack_id"]
+                    obj["coupon_amount"]=order["coupon"]["amount"]
+                    obj["coupon_id"]=order["coupon"]["id"]
+                    obj["shipping_cost"]=order["shipping_cost"]
+                    obj["date_created"]=order["date_created"]
+                    obj["application_id"]=order["application_id"]
+                    obj["pickup_id"]=order["pickup_id"]
+                    obj["status_detail"]=order["status_detail"]
+                    obj["buyer_nickname"]=order["buyer"]["nickname"]
+                    obj["buyer_id"]=order["buyer"]["id"]
+                    obj["total_amount"]=order["total_amount"]
+                    obj["paid_amount"]=order["paid_amount"]
+                    obj["status"]=order["status"]                   
                     print(obj)
 
                 current_page += 1
