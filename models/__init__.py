@@ -6,3 +6,4 @@ from . import meli_sales
 from . import meli_stock
 from . import meli_orders
 from . import meli_orders_items
+from . import meli_shipments
