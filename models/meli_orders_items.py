@@ -18,6 +18,7 @@ class MercadolibreOrdersItems(models.Model):
 
     order_id = fields.Many2one('meli.order', string='order')
     item_id = fields.Char("Item ID")
+    isbn = fields.Char("ISBN")
     title = fields.Char("Titulo")
     #product_id = fields.Many2one('product.template', string='Producto')
     quantity= fields.Integer('Cantidad')
@@ -27,3 +28,13 @@ class MercadolibreOrdersItems(models.Model):
     full_unit_price= fields.Float('Precio unitario FULL') 
     base_exchange_rate= fields.Float('Tipo de cambio') 
     currency_id= fields.Char('Moneda')
+    geolocation = fields.Char('Geolocalización')
+    #permalink
+    #condicion
+    #Idioma
+    #Edad recomendad
+    #Altura del paquete
+    #Peso del paquete
+    #Año de publicación
+    #Garantia
+    #Categoria

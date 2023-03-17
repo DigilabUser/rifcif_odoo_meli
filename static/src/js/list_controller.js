@@ -49,15 +49,15 @@ odoo.define('rifcif_odoo_meli.JsToCallWizard', function (require) {
       action_to_sync_meli_shipments: function(event) {
         event.preventDefault();
         var self = this;
-        self.do_action({
-          name: "Traer ordenes de Mercadolibre",
-          type: 'ir.actions.act_window',
-          res_model: 'meli.order.wizard',
-          view_mode: 'form',
-          view_type: 'form',
-          views: [[false, 'form']],
-          target: 'new',
-       });   
+        var rpc = require('web.rpc');
+        rpc.query({
+          model: 'meli.shipments',
+          method: 'syncShipments',
+          args: [{
+            'arg1':"sadasd"
+          }]
+
+        }).then(function () { console.log("Todo") } )
       },      
           
       // action_to_sync_meli_ventas: function(event) {

@@ -154,16 +154,13 @@ class MercadolibreShipments(models.Model):
         order_ids = self.env["meli.order"].search([])
         for order in order_ids:
             #Solicitar los shipments
-            shipment_id = order["shipment_id"]
+            shipment_id = order["shipping_id"]
             url_shipments = SHIPMENTS_URI.format(shipment_id)
-            response_shipment = self.get_data_from_api(url_shipments,header)
-            #Transformar respuesta en JSON
-            json_shipments = json.loads(response_shipment.text)
+            json_shipments = self.get_data_from_api(url_shipments,header)
             print(json_shipments)
-            for shipment in json_shipments:
-                #armar el obj
+            if json_shipments["status"]!=404:
                 obj={}
-                obj["receiver_id"] = shipment["receiver_id"]
+                obj["receiver_id"] = json_shipments["receiver_id"]
             
 
                 #self.env["meli.shipments"].create(obj)

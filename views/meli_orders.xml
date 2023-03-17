@@ -88,6 +88,7 @@
                             <page name="Items" string="Items">
                                 <field name="item_ids">
                                     <tree>
+                                        <field name="isbn"></field>
                                         <field name="item_id"></field>
                                         <field name="title"></field>
                                         <field name="quantity"></field>

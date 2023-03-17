@@ -115,16 +115,27 @@ class MLOrderWizard(models.TransientModel):
                     obj["total_amount"]=order["total_amount"]
                     obj["paid_amount"]=order["paid_amount"]
                     obj["status"]=order["status"]                   
-                    print(obj)
+                    #print(obj)
 
                     order_exist= self.env['meli.order'].search([("ml_order_id","=",obj["ml_order_id"])])
                     if len(order_exist)==0:
                         res = self.env["meli.order"].sudo().create(obj)
+                        #Aca me traigo los items
                         for item in order["order_items"]:
+                            url_item = ITEM_URI.format(item["item"]["id"])
+                            response_item = requests.get(url_item, headers=header)
+                            json_item = json.loads(response_item.text)
+                            #obtengo el ISBN
+                            isbn = ""
+                            for rec in json_item["attributes"]:
+                                if rec["id"] == "GTIN":
+                                    isbn=rec["value_name"]
+                            print(json_item)
                             obj_item={}
                             obj_item["order_id"] = res.id
                             obj_item["title"] = item["item"]["title"]
                             obj_item["item_id"] = item["item"]["id"]
+                            obj_item["isbn"] = isbn
                             obj_item["quantity"]=item["quantity"]
                             obj_item["sale_fee"]=item["sale_fee"]
                             obj_item["listing_type"]=item["listing_type_id"]
@@ -132,6 +143,8 @@ class MLOrderWizard(models.TransientModel):
                             obj_item["full_unit_price"]=item["full_unit_price"]
                             obj_item["base_exchange_rate"]=item["base_exchange_rate"]
                             obj_item["currency_id"]=item["currency_id"]
+                            obj_item["geolocation"]="https://www.google.com/maps/@{},{},15z".format(str(json_item["geolocation"]["latitude"]), str(json_item["geolocation"]["longitude"]))
+                            #Aca Crea
                             self.env["meli.order.items"].sudo().create(obj_item)
                         for payment in order["payments"]:
                             obj_payment={}
