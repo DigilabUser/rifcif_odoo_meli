@@ -81,7 +81,19 @@
 							<field name="paid_amount"></field>							
 							<field name="status"></field>            							  	
 		           		</group>
+                        <notebook>
+                            <page name="Items" string="Items">
+                                <field name="item_ids">
+                                    <tree>
+                                        <field name="product_id"></field>
+                                        <field name="quantity"></field>
+                                        <field name="unit_price"></field>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
 		          	</sheet>
+
 	       		</form>
 	   	 	</field>
 	    </record>

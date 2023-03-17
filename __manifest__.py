@@ -17,7 +17,7 @@
         'views/product_template.xml',
         'views/meli_connector.xml',
         'views/meli_orders.xml',
-        'wizards/wizard.xml'
+        'wizards/wizard.xml',
         #'views/settings_inherit.xml'
     ],
     'qweb': ['static/src/xml/template.xml'],

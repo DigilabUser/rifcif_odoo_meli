@@ -28,12 +28,66 @@ ALBERT_ID='422252521'
 
 class MercadolibreOrders(models.Model):
     _name = 'meli.order'
+    #campos relacionados
+    item_ids = fields.One2many('meli.order.items', 'order_id', string='Items')
 
     current_page = fields.Integer(default=1)
     #orders = fields.One2many('meli.order', 'order_id')
-    # Order fields Aca crear el modelo
+    # Order fieldsellerr el modelo
+
+    # Seller
+    seller_nickname = fields.Char('Nombre del vendedor')
+    seller_id = fields.Char('Id del vendedor')
+
+    fulfilled = fields.Boolean('Cumplido') # Preguntar
+    buying_mode = fields.Char('Modo de compra')
+    # Taxes
+    taxes_amount = fields.Integer('Cantidad')
+ 
+    # order_request
+    order_request_change = fields.Char('Cambio de pedido')
+    order_request_return = fields.Char('Retorno de pedido')
+
+    expiration_date = fields.Datetime('Fecha de caducidad')
+    # Feedback
+    feedback_sale = fields.Char('Venta')
+    feedback_purchase = fields.Char('Comprar')
+    # Shipping
     shipping_id = fields.Char('ID de envío')
+
+    date_closed = fields.Datetime('Fecha de cierre')
+
+    id = fields.Char('Id')
     
+    manufacturing_ending_date = fields.Datetime('Fecha de finalizacion de fabrica')
+    hidden_for_seller = fields.Boolean('Oculto para el vendedor')
+
+    date_last_updated = fields.Datetime('Fecha última actualización')
+    last_updated = fields.Datetime('Última actualización')
+    comments = fields.Char('Comentarios')
+    pack_id = fields.Char('Id paquete')
+
+    # Coupon
+    coupon_amount= fields.Integer('Cantidad cupones')
+    coupon_id = fields.Char('Id coupon')
+    shipping_cost = fields.Float('Costo de envio')
+
+    date_created = fields.Datetime('Fecha de creación')
+    application_id = fields.Char('Id aplicación')
+    pickup_id = fields.Char('Id recoger')
+    status_detail = fields.Char('Estado detalle')
+    
+    # preguntar tags
+
+    buyer_name = fields.Char('Nombre comprador')
+    buyer_id = fields.Char('Id comprador')
+    total_amount = fields.Integer('Cantidad total')
+    paid_amount = fields.Float('Monto de pago')
+
+    # preguntar mediations
+
+    currency_id = fields.Char('Id divisa')
+    status= fields.Char('Estado')
 
     def getImage(self, url):
         '''
@@ -88,7 +142,17 @@ class MercadolibreOrders(models.Model):
                     print(order)
                     obj={}
                     obj["seller_nickname"]=order["seller"]["nickname"]
+                    obj["seller_id"]=order["seller"]["id"]
                     obj["fulfilled"]=order["fulfilled"]
+                    obj["buying_mode"]=order["buying_mode"]
+                    obj["taxes_amount"]=order["taxes"]["amount"]
+                    obj["order_request_change"]=order["order_request"]["change"]
+                    obj["order_request_return"]=order["order_request"]["return"]
+                    obj["expiration_date"]=order["expiration_date"]
+                    obj["feedback_sale"]=order["feedback"]["sale"]
+                    obj["feedback_purchase"]=order["feedback"]["purchase"]
+                    obj["shipping"]=order["shipping"]["id"]
+                    
                     print(obj)
 
                 current_page += 1
