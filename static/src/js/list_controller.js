@@ -34,37 +34,32 @@ odoo.define('rifcif_odoo_meli.JsToCallWizard', function (require) {
                 }).then(function () { console.log("Todo") } )   
       },
       action_to_sync_meli_order: function(event) {
-        console.log("PROBANDO ")
         event.preventDefault();
         var self = this;
-        var rpc = require('web.rpc');
-        console.log("Paso 2")
-        rpc.query({
-                    model: 'meli.order',
-                    method: 'syncOrders',
-                    args: [{
-
-                      'arg1': "value1",
-
-              }]
-                }).then(function () { console.log("Todo") } )   
+        self.do_action({
+          name: "Traer ordenes de Mercadolibre",
+          type: 'ir.actions.act_window',
+          res_model: 'meli.order.wizard',
+          view_mode: 'form',
+          view_type: 'form',
+          views: [[false, 'form']],
+          target: 'new',
+       });  
       },      
       action_to_sync_meli_shipments: function(event) {
-        console.log("PROBANDO ")
         event.preventDefault();
         var self = this;
-        var rpc = require('web.rpc');
-        console.log("Paso 2")
-        rpc.query({
-                    model: 'meli.shipments',
-                    method: 'syncShipments',
-                    args: [{
-
-                      'arg1': "value1",
-
-              }]
-                }).then(function () { console.log("Todo") } )   
-      },         
+        self.do_action({
+          name: "Traer ordenes de Mercadolibre",
+          type: 'ir.actions.act_window',
+          res_model: 'meli.order.wizard',
+          view_mode: 'form',
+          view_type: 'form',
+          views: [[false, 'form']],
+          target: 'new',
+       });   
+      },      
+          
       // action_to_sync_meli_ventas: function(event) {
       //   console.log("PROBANDO ")
       //   event.preventDefault();

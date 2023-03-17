@@ -29,7 +29,7 @@ class MercadolibreOrdersPayments(models.Model):
     installments = fields.Integer('# Cuotas')#
     authorization_code = fields.Char('Codigo de Autorización')
     taxes_amount= fields.Integer('Impuestos')
-    id = fields.Integer('ID')
+    payment_id = fields.Char('N° Pago')
     date_last_modified = fields.Datetime('Ultima fecha de modificacion')
     coupon_amount = fields.Integer('Cantidad de cupon')
     shipping_cost = fields.Integer('Costo de envio')#

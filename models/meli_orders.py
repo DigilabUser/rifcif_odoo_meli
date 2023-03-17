@@ -12,22 +12,10 @@ from datetime import datetime
 from datetime import timedelta
 from odoo.exceptions import ValidationError
 _logger = logging.getLogger(__name__)
-
-API_URI = 'https://api.mercadolibre.com'
-USERS_URI = API_URI + '/users'
-ME_URI = USERS_URI + '/me'
-ITEMS_URI = API_URI + '/items'
-ITEM_URI = API_URI + '/items' + '/{}'
-#SEARCH_ITEM_URI = USERS_URI + '/{}/items/search&sort=date_desc&'
-ORDERS_URI =API_URI + '/orders'
-SHIPMENTS_URI = ORDERS_URI + '/{}/shipments'
-#GET_ORDER = ORDERS_URI + '/search?seller={}&order.status=paid'
-GET_ORDER = ORDERS_URI + '/search?seller={}&limit={}&offset={}'
-PRINT_TICKET_URI = API_URI + '/shipment_labels?shipment_ids={}&response_type=pdf'
-ALBERT_ID='422252521'
-
 class MercadolibreOrders(models.Model):
     _name = 'meli.order'
+    _rec_name="ml_order_id"
+
     #campos relacionados
     item_ids = fields.One2many('meli.order.items', 'order_id', string='Items')
     payment_ids = fields.One2many('meli.order.payments', 'order_id', string='payment')
@@ -40,7 +28,7 @@ class MercadolibreOrders(models.Model):
     seller_nickname = fields.Char('Nombre del vendedor')
     seller_id = fields.Char('Id del vendedor')
 
-    fulfilled = fields.Boolean('Cumplido')
+    fulfilled = fields.Boolean('Fulfilled')
     buying_mode = fields.Char('Modo de compra')
     # Taxes
     taxes_amount = fields.Integer('Cantidad')
@@ -54,11 +42,11 @@ class MercadolibreOrders(models.Model):
     feedback_sale = fields.Char('Venta')
     feedback_purchase = fields.Char('Comprar')
     # Shipping
-    shipping_id = fields.Char('ID de envío')
+    shipping_id = fields.Char('N° de Envío')
 
     date_closed = fields.Datetime('Fecha de cierre')
 
-    id = fields.Char('Id')
+    ml_order_id = fields.Char('N° Orden')
     
     manufacturing_ending_date = fields.Datetime('Fecha de finalizacion de fabrica')
     hidden_for_seller = fields.Boolean('Oculto para el vendedor')
@@ -79,95 +67,7 @@ class MercadolibreOrders(models.Model):
     pickup_id = fields.Char('Id recoger')
     status_detail = fields.Char('Estado detalle')
     buyer_nickname = fields.Char('Nombre comprador')
-    buyer_id = fields.Char('Id comprador')
+    buyer_id = fields.Char('Comprador')
     total_amount = fields.Integer('Cantidad total')
     paid_amount = fields.Float('Monto de pago')
     status= fields.Char('Estado')
-
-    def getImage(self, url):
-        '''
-        Función que convierte un URL a una imagen en BASE64 para poder guardarla en un 
-        campo Binary
-        '''
-        return base64.b64encode(requests.get(url).content)
-
-    def get_data_from_api(self, uri, header):
-        """
-        Función que nos permite consumir un API RestFUL y que nos devuelve la respuesta
-
-        Attributes:
-            uri (str): Endpoint donde se va a consumir
-            header (str): Cabecera
-        """
-        response = requests.get(uri, headers=header)
-        json_response = json.loads(response.text)
-        return json_response
-
-    def syncOrders(self):
-        '''
-        Función que sincroniza las ventas de mercadoLibre y las trae a Odoo
-        '''
-        #Seteo un flag para que jale todos los pedidos
-        there_is_orders= True
-        #Obtener el token
-        connector_obj = self.env['meli.connector'].search([])
-        for conn in connector_obj:
-            token = conn.token
-        header = {'Authorization': 'Bearer '+ token}
-        #Autenticar
-        response_user_me = requests.get(ME_URI, headers=header)
-        json_user_me= json.loads(response_user_me.text)
-        #Si el Token está caducado, avisará para crear uno nuevo.
-        if json_user_me["status"] == 401:
-            raise ValidationError("El Token ha caducado, por favor generarlo de nuevo")
-        limit = 50 # Cantidad de órdenes por página
-        current_page = 1
-        while(there_is_orders):
-            offset = (current_page - 1) * limit
-            url_orders = GET_ORDER.format(json_user_me['id'], limit,offset)
-            response_orders = requests.get(url_orders, headers=header)
-            #Se transforma la respuesta en formato JSON
-            json_orders = json.loads(response_orders.text)
-            #print(json_orders)
-            # if str(json_orders["status"]) == '4':
-            #     raise ValidationError(json_orders["message"])
-            data = json_orders["results"]
-            if len(data)!= 0:
-                for order in data:
-                    print(order)
-                    obj={}
-                    obj["seller_nickname"]=order["seller"]["nickname"]
-                    obj["seller_id"]=order["seller"]["id"]
-                    obj["fulfilled"]=order["fulfilled"]
-                    obj["buying_mode"]=order["buying_mode"]
-                    obj["taxes_amount"]=order["taxes"]["amount"]
-                    obj["order_request_change"]=order["order_request"]["change"]
-                    obj["order_request_return"]=order["order_request"]["return"]
-                    obj["expiration_date"]=order["expiration_date"]
-                    obj["feedback_sale"]=order["feedback"]["sale"]
-                    obj["feedback_purchase"]=order["feedback"]["purchase"]
-                    obj["shipping"]=order["shipping"]["id"]
-                    obj["date_closed"]=order["date_closed"]
-                    obj["manufacturing_ending_date"]=order["manufacturing_ending_date"]
-                    obj["hidden_for_seller"]=order["hidden_for_seller"]
-                    obj["date_last_updated"]=order["date_last_updated"]
-                    obj["last_updated"]=order["last_updated"]
-                    obj["comments"]=order["comments"]
-                    obj["pack_id"]=order["pack_id"]
-                    obj["coupon_amount"]=order["coupon"]["amount"]
-                    obj["coupon_id"]=order["coupon"]["id"]
-                    obj["shipping_cost"]=order["shipping_cost"]
-                    obj["date_created"]=order["date_created"]
-                    obj["application_id"]=order["application_id"]
-                    obj["pickup_id"]=order["pickup_id"]
-                    obj["status_detail"]=order["status_detail"]
-                    obj["buyer_nickname"]=order["buyer"]["nickname"]
-                    obj["buyer_id"]=order["buyer"]["id"]
-                    obj["total_amount"]=order["total_amount"]
-                    obj["paid_amount"]=order["paid_amount"]
-                    obj["status"]=order["status"]                   
-                    print(obj)
-
-                current_page += 1
-            else: 
-                there_is_orders = False

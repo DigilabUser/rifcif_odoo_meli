@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="meli_order_wizard_view_form" model="ir.ui.view">
+        <field name="name">meli.order.wizard.form</field>
+        <field name="model">meli.order.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Traer ordenes de MercadoLibre">
+                <group class="oe_title">
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                </group>
+
+                <footer>
+                    <button name="syncOrders" type="object" string="Sincronizar" class="oe_highligth" />
+                    <button name="cancel" string="Cancelar" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

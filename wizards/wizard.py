@@ -26,37 +26,17 @@ PRINT_TICKET_URI = API_URI + '/shipment_labels?shipment_ids={}&response_type=pdf
 class MkWizard(models.TransientModel):
     _name = 'meli.sales.wizard'
 
-    #Se define los rango de fechas con un valor por default del día de hoy a las 00:00:01 de inicio
-    #y de final el dia de hoy a las 23:59:59.
-    #Se pone un Timedelta de 3 para coincidir con la diferencia horaria de Chile
     date_from = fields.Datetime('Fecha Inicial', default=datetime.now().replace(hour=00, minute=00, second=1)+timedelta(hours=3))
     date_to = fields.Datetime('Fecha Final', default=datetime.now().replace(hour=23, minute=59, second=59)+timedelta(hours=3))
-    
-    
     def getImage(self, url):
-        '''
-        Función que convierte un URL a una imagen en BASE64 para poder guardarla en un 
-        campo Binary
-        '''
         return base64.b64encode(requests.get(url).content)
 
     def get_data_from_api(self, uri, header):
-        """
-        Función que nos permite consumir un API RestFUL y que nos devuelve la respuesta
-
-        Attributes:
-            uri (str): Endpoint donde se va a consumir
-            header (str): Cabecera
-        """
         response = requests.get(uri, headers=header)
         json_response = json.loads(response.text)
         return json_response
 
     def syncOrders(self):
-        '''
-        Función que sincroniza las ventas de mercadoLibre y las trae a Odoo
-        '''
-
         #Obtener el token
         connector_obj = self.env['meli.connector'].search([])
         for conn in connector_obj:
@@ -65,41 +45,33 @@ class MkWizard(models.TransientModel):
         #Autenticar
         response_user_me = requests.get(ME_URI, headers=header)
         json_user_me= json.loads(response_user_me.text)
-        #Si el Token está caducado, avisará para crear uno nuevo.
+        _logger.info(json_user_me)
         if json_user_me["status"] == 401:
             raise ValidationError("El Token ha caducado, por favor generarlo de nuevo")
-        
         #Obtener las ordenes
         date_init_formatted = str(self.date_from).replace(" ","T")+'.000-00:00'
         date_end_formatted = str(self.date_to).replace(" ","T")+'.000-00:00'
-        #Se pide las ordenes en un intervalo de tiempo
         url_orders = GET_ORDER.format(json_user_me['id'], date_init_formatted,date_end_formatted)
         response_orders = requests.get(url_orders, headers=header)
-        #Se transforma la respuesta en formato JSON
         json_orders = json.loads(response_orders.text)
-        if str(json_orders["status"]) == '4':
-            raise ValidationError(json_orders["message"])        
-        #Tenemos el resultado de todas las ordenes en el data.
+        #_logger.info("\n\n %s",json_orders)
         data = json_orders["results"]
         for order in data:
             # Getting Shipping Data
             shipping = self.get_data_from_api(SHIPMENTS_URI.format(order["id"]), header)
-            if str(shipping['status'])[0]!='4':
-                sh_shipping_id = shipping["id"]
-                sh_logistic_type = "full" if shipping["logistic_type"]  == "fulfillment" else "notfull"
-                sh_status = shipping["status"]
-                sh_status_history = shipping["status_history"]
-                sh_shipping_items=shipping["shipping_items"]
-                sh_tracking_method=shipping["tracking_method"]
-                sh_receiver_address=shipping["receiver_address"]
-                sh_geolocation_map="https://www.google.com.cl/maps/place/{},%20{}".format(sh_receiver_address["latitude"],sh_receiver_address["longitude"])
-                sh_country = sh_receiver_address["country"]["name"]
-                sh_city = sh_receiver_address["city"]["name"]
-                sh_address_line = sh_receiver_address["address_line"]
-                sh_receiver_name = sh_receiver_address["receiver_name"]
-                sh_comment = sh_receiver_address["comment"]              
-            else:
-                raise ValidationError("El Token ha caducado, por favor generarlo de nuevo")                
+            sh_shipping_id = shipping["id"] if shipping["status"]!=404 else ""
+            sh_logistic_type = "" if shipping["status"]==404 else "full" if shipping["logistic_type"]  == "fulfillment" else "notfull"
+            sh_status = shipping["status"] if shipping["status"]!=404 else ""
+            sh_status_history = shipping["status_history"] if shipping["status"]!=404 else ""
+            sh_shipping_items=shipping["shipping_items"] if shipping["status"]!=404 else ""
+            sh_tracking_method=shipping["tracking_method"] if shipping["status"]!=404 else ""
+            sh_receiver_address=shipping["receiver_address"] if shipping["status"]!=404 else ""
+            sh_geolocation_map="https://www.google.com.pe/maps/place/{},%20{}".format(sh_receiver_address["latitude"],sh_receiver_address["longitude"]) if shipping["status"]!=404 else ""
+            sh_country = sh_receiver_address["country"]["name"] if shipping["status"]!=404 else ""
+            sh_city = sh_receiver_address["city"]["name"] if shipping["status"]!=404 else ""
+            sh_address_line = sh_receiver_address["address_line"] if shipping["status"]!=404 else ""
+            sh_receiver_name = sh_receiver_address["receiver_name"] if shipping["status"]!=404 else ""
+            sh_comment = sh_receiver_address["comment"] if shipping["status"]!=404 else ""
 
             # Getting Item Data
             order_items = order['order_items'][0]
@@ -117,6 +89,7 @@ class MkWizard(models.TransientModel):
 
             # Getting Order Data
             item_id = order_items["item"]["id"]
+            _logger.info("\n\n %s",order["date_created"])
             order_obj={
                 'meli_order_id': order["id"],
                 'meli_item_id':item_id,

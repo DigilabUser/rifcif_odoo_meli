@@ -5,34 +5,36 @@
 			<field name="name">meli_order_tree_view</field>
 			<field name="model">meli.order</field>
 	        <field name="arch" type="xml">
-		       	<tree string="MercadoLibre Ordenes">    
-            		<field name="seller_id"></field>
-					<field name="fulfilled"></field>
-					<field name="buying_mode"></field>
+		       	<tree string="MercadoLibre Ordenes">   
+                    <field name="ml_order_id"></field> 
+            		<!-- <field name="seller_id"></field>
+					<field name="fulfilled"></field> -->
+					<!-- <field name="buying_mode"></field> -->
 					<field name="taxes_amount"></field>
-					<field name="order_request_change"></field>
+					<!-- <field name="order_request_change"></field> -->
 					<!-- <field name="order_requerest_return"></field> -->
 					<field name="expiration_date"></field>
-					<field name="feedback_sale"></field>
-					<field name="feedback_purchase"></field>
+					<!-- <field name="feedback_sale"></field>
+					<field name="feedback_purchase"></field> -->
 					<field name="shipping_id"></field>
-					<field name="date_closed"></field>
-					<field name="id"></field>
-					<field name="manufacturing_ending_date"></field>
-					<field name="hidden_for_seller"></field>
+					
+					<!-- <field name="manufacturing_ending_date"></field> -->
+					<!-- <field name="hidden_for_seller"></field>
 					<field name="date_last_updated"></field>
 					<field name="last_updated"></field>
 					<field name="comments"></field>
 					<field name="pack_id"></field>
 					<field name="coupon_amount"></field>
-					<field name="coupon_id"></field>
-					<field name="shipping_cost"></field>
+					<field name="coupon_id"></field> -->
+					
 					<field name="date_created"></field>
+                    <!-- <field name="date_closed"></field> -->
 					<!-- <field name="aplication_id"></field> -->
-					<field name="pickup_id"></field>
+					<!-- <field name="pickup_id"></field> -->
 					<field name="status_detail"></field>
 					<!-- <field name="buyer_name"></field> -->
-					<field name="buyer_id"></field>
+					<field name="buyer_nickname"></field>
+                    <field name="shipping_cost"></field>
 					<field name="total_amount"></field>
 					<field name="paid_amount"></field>					
 					<field name="status"></field>
@@ -47,40 +49,38 @@
 	     	<field name="arch" type="xml">
 		        <form string="MeLi order">
 		       		<sheet>
-		       	  		<group>
-                            <group name="name" string="string">
+                        <div class="oe_title">
+                            <h1>
+                                <field name="ml_order_id" readonly="1"/>
+                            </h1>
+                        </div>
+		       	  		<group col="3">
+                            <group>
                                 <field name="shipping_id"></field>
                                 <field name="seller_id"></field>
                                 <field name="fulfilled"></field>
                                 <field name="buying_mode"></field>   
-                                <field name="taxes_amount"></field>
-                                <field name="order_request_change"></field>
-                                <field name="expiration_date"></field>                                                             
-                            </group>
-                            <group name="name" string="string">
-                                <field name="feedback_sale"></field>
-                                <field name="feedback_purchase"></field>
-                                <field name="date_closed"></field>
-                                <field name="manufacturing_ending_date" invisible="1"></field>
-                                <field name="hidden_for_seller"  invisible="1"></field>                                
-                            </group>
-                            <group name="name" string="string">
-                                <field name="date_last_updated"></field>
-                                <field name="last_updated"></field>
-                                <field name="comments"></field>
-                                <field name="pack_id" invisible="1"></field>
-                                <field name="coupon_amount"></field>
-                                <field name="coupon_id"></field>
-                                <field name="shipping_cost"></field>                                
-                            </group>
-                            <group name="name" string="string">
-                                <field name="date_created"></field>
-                                <field name="pickup_id"></field>
-                                <field name="status_detail"></field>
                                 <field name="buyer_id"></field>
+                                <field name="pack_id" invisible="1"></field>
+                                <field name="coupon_id"></field>
+                                <field name="pickup_id"></field>
+                            </group>
+                            <group>
+                                <field name="coupon_amount"></field>
+                                <field name="taxes_amount"></field>
+                                <field name="shipping_cost"></field>                                
                                 <field name="total_amount"></field>
-                                <field name="paid_amount"></field>							
+                                <field name="paid_amount"></field>							                            
+                                <field name="comments"></field>
                                 <field name="status"></field>                                  
+                            </group>
+                            <group>
+                                <field name="date_created"></field>
+                                <field name="expiration_date"></field>                                                             
+                                <field name="date_last_updated"></field>
+                                <field name="date_closed"></field>
+                                <field name="last_updated"></field>
+                                <!-- <field name="status_detail"></field> -->
                             </group>
 		  	
 		           		</group>
@@ -88,21 +88,28 @@
                             <page name="Items" string="Items">
                                 <field name="item_ids">
                                     <tree>
-                                        <field name="product_id"></field>
+                                        <field name="item_id"></field>
+                                        <field name="title"></field>
                                         <field name="quantity"></field>
                                         <field name="unit_price"></field>
+                                        <field name="full_unit_price"></field>
+                                        <field name="sale_fee"></field>
+                                        <field name="currency_id"></field>
                                     </tree>
                                 </field>
                             </page>
                             <page name="Payments" string="Pagos">
                                 <field name="payment_ids">
                                     <tree>
+                                        <field name="reason"></field>
+                                        <field name="status_code"></field>
                                         <field name="total_paid_amount"></field>
                                         <field name="operation_type"></field>
-                                        <field name="installments"></field>
+                                        <field name="transaction_amount"></field>
+                                        <field name="date_approved"></field>
+                                        <field name="collector_id"></field>
+                                        <field name="payment_id"></field>
                                         <field name="shipping_cost"></field>
-                                        <field name="payment_method_id"></field>
-                                        <field name="payment_type"></field>
                                         <field name="currency_id"></field>
                                     </tree>
                                 </field>
