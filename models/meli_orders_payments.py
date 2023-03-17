@@ -20,19 +20,19 @@ class MercadolibreOrdersPayments(models.Model):
 
     reason = fields.Char('Motivo')
     status_code = fields.Char('Codigo Estado')
-    total_paid_amount = fields.Float('Monto Pagado')
-    operation_type = fields.Char('Tipo Operacion')
+    total_paid_amount = fields.Float('Monto Pagado') #
+    operation_type = fields.Char('Tipo Operacion') #
     transaction_amount = fields.Float('Cantidad de Transaccion')
     date_approved = fields.Datetime('Fecha Aprobado')
-    collector_id = fields.Char('ID Coleccionista')
+    collector_id = fields.Char('ID Cobrador')
     coupon_id = fields.Char('ID Coupon')
-    installments = fields.Integer('Cuotas')
+    installments = fields.Integer('# Cuotas')#
     authorization_code = fields.Char('Codigo de Autorización')
     taxes_amount= fields.Integer('Impuestos')
     id = fields.Integer('ID')
     date_last_modified = fields.Datetime('Ultima fecha de modificacion')
     coupon_amount = fields.Integer('Cantidad de cupon')
-    shipping_cost = fields.Integer('Costo de envio')
+    shipping_cost = fields.Integer('Costo de envio')#
     installment_amount = fields.Float('Monto de cuota')
     date_created = fields.Char('Fecha de creacion')
     activation_uri = fields.Char('Activacion Uri')
@@ -40,8 +40,8 @@ class MercadolibreOrdersPayments(models.Model):
     card_id = fields.Integer('Tarjeta de identificacion')
     status_detail = fields.Char('Detalle de estado')
     issuer_id = fields.Char('ID emisor')
-    payment_method_id = fields.Char('Metodo de pago')
-    payment_type = fields.Char('Tipo de pago')
+    payment_method_id = fields.Char('Metodo de pago')#
+    payment_type = fields.Char('Tipo de pago')#
     deferred_period = fields.Char('Periodo diferido')
     atm_transfer_reference_transaction_id = fields.Char('ID de transaccion')
     atm_transfer_reference_company_id = fields.Char('ID de la empresa')
@@ -49,6 +49,6 @@ class MercadolibreOrdersPayments(models.Model):
     payer_id = fields.Integer('ID del pagador')
     marketplace_fee = fields.Float('Cuota del mercado')
     order_id_1 = fields.Integer('ID de pedido')
-    currency_id = fields.Char('ID moneda')
+    currency_id = fields.Char('Moneda')#
     status = fields.Char('Estado')
     transaction_order_id = fields.Char('ID de trasaccion del pedido')

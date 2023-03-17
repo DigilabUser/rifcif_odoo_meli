@@ -94,7 +94,7 @@ class MercadolibreShipments(models.Model):
     sibling_last_updated = fields.Datetime('Fecha de última actualización')
 
     
-    return_tracking_number = fields.Int('Número de tracking de regreso')
+    return_tracking_number = fields.Integer('Número de tracking de regreso')
     site_id = fields.Char('Id de sitio')
     carrier_info = fields.Char('Información del operador')
     market_place = fields.Char('Mercado')
