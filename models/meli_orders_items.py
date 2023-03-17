@@ -16,6 +16,7 @@ _logger = logging.getLogger(__name__)
 class MercadolibreOrdersItems(models.Model):
     _name = 'meli.order.items'
 
+    order_id = fields.Many2one('meli.order', string='order')
     product_id = fields.Many2one('product.template', string='Producto')
     quantity= fields.Integer('Cantidad')
     sale_fee= fields.Float('Tarifa de venta') 

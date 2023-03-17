@@ -5,3 +5,4 @@ from . import meli_sales
 #from . import res_settings_inherit
 from . import meli_stock
 from . import meli_orders
+from . import meli_orders_items
