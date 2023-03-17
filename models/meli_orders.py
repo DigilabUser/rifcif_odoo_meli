@@ -30,6 +30,7 @@ class MercadolibreOrders(models.Model):
     _name = 'meli.order'
     #campos relacionados
     item_ids = fields.One2many('meli.order.items', 'order_id', string='Items')
+    payment_ids = fields.One2many('meli.order.payments', 'order_id', string='payment')
 
     current_page = fields.Integer(default=1)
     #orders = fields.One2many('meli.order', 'order_id')
