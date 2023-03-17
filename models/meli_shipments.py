@@ -22,8 +22,8 @@ class MercadolibreShipments(models.Model):
     _name = 'meli.shipments'
 #Campos no relacionales
     
-    snapshot_packing = fields.Char('Paquete instantánea')
-    receiver_id = fields.Char('Id del destinatario')
+    snapshot_packing = fields.Char('Paquete instantánea') # Ya esta
+    receiver_id = fields.Char('Id del destinatario') # Ya esta
     base_cost = fields.Integer('Cumplido') 
 
     #Status_history
@@ -161,6 +161,107 @@ class MercadolibreShipments(models.Model):
             if json_shipments["status"]!=404:
                 obj={}
                 obj["receiver_id"] = json_shipments["receiver_id"]
-            
+                obj["snapshot_packing"] = json_shipments["snapshot_packing"]
+                obj["base_cost"]=json_shipments["base_cost"]
+
+                #Status_history
+                obj["date_shipped"]=json_shipments["status_history"]["date_shipped"]
+                obj["date_returned"]=json_shipments["status_history"]["date_returned"]
+                obj["date_delivered"]=json_shipments["status_history"]["date_delivered"]
+                obj["date_first_visit"]=json_shipments["status_history"]["date_first_visit"]
+                obj["date_not_delivered"]=json_shipments["status_history"]["date_not_delivered"]
+                obj["date_cancelled"]=json_shipments["status_history"]["date_cancelled"]
+                obj["date_handling"]=json_shipments["status_history"]["date_handling"]
+                obj["date_ready_to_ship"]=json_shipments["status_history"]["date_ready_to_ship"]
+
+                obj["type"]=json_shipments["type"]
+                obj["return_details"]=json_shipments["return_details"]
+                obj["sender_id"]=json_shipments["sender_id"]
+                obj["mode"]=json_shipments["mode"]
+                obj["order_cost"]=json_shipments["order_cost"]
+                obj["service_id"]=json_shipments["service_id"]
+                obj["tracking_number"]=json_shipments["tracking_number"]
+
+                # cost_components
+                obj["cost_components_loyal_discount"]=json_shipments["cost_components"]["loyal_discount"]
+                obj["cost_components_special_discount"]=json_shipments["cost_components"]["special_discount"]
+                obj["cost_components_compensation"]=json_shipments["cost_components"]["compensation"]
+                obj["cost_components_gap_discount"]=json_shipments["cost_components"]["gap_discount"]
+                obj["cost_components_ratio"]=json_shipments["cost_components"]["ratio"]
+
+                obj["id"]=json_shipments["id"]
+                obj["tracking_method"]=json_shipments["tracking_method"]
+                obj["last_updated"]=json_shipments["last_updated"]
+                obj["items_types"]=json_shipments["items_types"]
+                obj["comments"]=json_shipments["comments"]
+                obj["substatus"]=json_shipments["substatus"]
+                obj["date_created"]=json_shipments["date_created"]
+                obj["date_first_printed"]=json_shipments["date_first_printed"]
+                obj["created_by"]=json_shipments["created_by"]
+                obj["application_id"]=json_shipments["application_id"]
+                
+                #Sender address
+                obj["sender_address_country_name"]=json_shipments["sender_address"]["country"]["name"]
+                obj["sender_address_address_line"]=json_shipments["sender_address"]["address_line"]
+                obj["sender_address_scoring"]=json_shipments["sender_address"]["scoring"]
+                obj["sender_address_agency"]=json_shipments["sender_address"]["agency"]
+                obj["sender_address_city_name"]=json_shipments["sender_address"]["city"]["name"]
+                obj["sender_address_geolocation_type"]=json_shipments["sender_address"]["geolocation_type"]
+                obj["sender_address_latitude"]=json_shipments["sender_address"]["latitude"]
+                obj["sender_address_municipality_name"]=json_shipments["sender_address"]["municipality"]["name"]
+                obj["sender_address_location_id"]=json_shipments["sender_address"]["location_id"]
+                obj["sender_address_street_name"]=json_shipments["sender_address"]["street_name"]
+                obj["sender_address_zip_code"]=json_shipments["sender_address"]["zip_code"]
+                obj["sender_address_geolocation_source"]=json_shipments["sender_address"]["geolocation_source"]
+                obj["sender_address_intersection"]=json_shipments["sender_address"]["intersection"]
+                obj["sender_address_street_number"]=json_shipments["sender_address"]["street_number"]
+                obj["sender_address_comment"]=json_shipments["sender_address"]["comment"]
+                obj["sender_address_id"]=json_shipments["sender_address"]["id"]
+                obj["sender_address_state_name"]=json_shipments["sender_address"]["state"]["name"]
+                obj["sender_address_neighborhood_name"]=json_shipments["sender_address"]["neighborhood"]["name"]
+                obj["sender_address_geolocation_last_updated"]=json_shipments["sender_address"]["geolocation_last_updated"]
+                obj["sender_address_longitude"]=json_shipments["sender_address"]["longitude"]
+
+                # Sibling
+                obj["sibling_reason"] = json_shipments["sibling"]["reason"]
+                obj["sibling_sibling_id"] = json_shipments["sibling"]["sibling_id"]
+                obj["sibling_description"] = json_shipments["sibling"]["description"]
+                obj["sibling_source"] = json_shipments["sibling"]["source"]
+                obj["sibling_date_created"] = json_shipments["sibling"]["date_created"]
+                obj["sibling_last_updated"] = json_shipments["sibling"]["last_updated"]
+
+                obj["return_tracking_number"] = json_shipments["return_tracking_number"]
+                obj["site_id"] = json_shipments["site_id"]
+                obj["carrier_info"] = json_shipments["carrier_info"]
+                obj["market_place"] = json_shipments["market_place"]
+
+                #Receiver address
+                obj["receiver_address_country_name"] = json_shipments["receiver_address"]["country"]["name"]
+                obj["receiver_address_address_line"] = json_shipments["receiver_address"]["address_line"]
+                obj["receiver_address_scoring"] = json_shipments["receiver_address"]["scoring"]
+                obj["receiver_address_agency"] = json_shipments["receiver_address"]["agency"]
+                obj["receiver_address_city_name"] = json_shipments["receiver_address"]["city"]["name"]
+                obj["receiver_address_geolocation_type"] = json_shipments["receiver_address"]["geolocation_type"]
+                obj["receiver_address_latitude"] = json_shipments["receiver_address"]["latitude"]
+                obj["receiver_address_municipality_name"] = json_shipments["receiver_address"]["municipality"]["name"]
+                obj["receiver_address_location_id"] = json_shipments["receiver_address"]["location_id"]
+                obj["receiver_address_street_name"] = json_shipments["receiver_address"]["street_name"]
+                obj["receiver_address_zip_code"] = json_shipments["receiver_address"]["zip_code"]
+                obj["receiver_address_geolocation_source"] = json_shipments["receiver_address"]["geolocation_source"]
+                obj["receiver_address_delivery_preference"] = json_shipments["receiver_address"]["delivery_preference"]
+                obj["receiver_address_intersection"] = json_shipments["receiver_address"]["intersection"]
+                obj["receiver_address_street_number"] = json_shipments["receiver_address"]["street_number"]
+                obj["receiver_address_comment"] = json_shipments["receiver_address"]["comment"]
+                obj["receiver_address_id"] = json_shipments["receiver_address"]["id"]
+                obj["receiver_address_state_name"] = json_shipments["receiver_address"]["state"]["name"]
+                obj["receiver_address_neighborhood_name"] = json_shipments["receiver_address"]["neighborhood"]["name"]
+                obj["receiver_address_geolocation_last_updated"] = json_shipments["receiver_address"]["geolocation_last_updated"]
+                obj["receiver_address_receiver_phone"] = json_shipments["receiver_address"]["receiver_phone"]
+                obj["receiver_address_longitude"] = json_shipments["receiver_address"]["longitude"]
+
+                obj["customer_id"] = json_shipments["customer_id"]
+                obj["order_id "] = json_shipments["order_id"]
+                obj["status"] = json_shipments["status"]
+                obj["logistic_type"] = json_shipments["logistic_type"]
 
                 #self.env["meli.shipments"].create(obj)
