@@ -143,7 +143,28 @@ class MLOrderWizard(models.TransientModel):
                             obj_item["full_unit_price"]=item["full_unit_price"]
                             obj_item["base_exchange_rate"]=item["base_exchange_rate"]
                             obj_item["currency_id"]=item["currency_id"]
+                            #categoria
+                            obj_item['category_id'] = json_item['category_id']
+                            #iventario
+                            obj_item['inventory_id']=json_item['inventory_id']
+                            #geolocalizacion
                             obj_item["geolocation"]="https://www.google.com/maps/@{},{},15z".format(str(json_item["geolocation"]["latitude"]), str(json_item["geolocation"]["longitude"]))
+                            #permalink
+                            obj_item['permalink']=json_item['permalink']
+                            #condicion orden[22]
+                            obj_item['attributes_item_condition_value_name']=json_item['attributes'][22]['value_name']
+                            #Idioma orden[23]
+                            obj_item['attributes_languaje_value_name']=json_item['attributes'][23]['value_name']
+                            #Edad maxima recomendada orden[25]
+                            obj_item['attributes_max_recommended_age_value_name']=json_item['attributes'][25]['value_name']
+                            #Altura del paquete orden[28]
+                            obj_item['attributes_package_height_value_name']=json_item['attributes'][28]['value_name']
+                            #Peso del paquete orden[30]
+                            obj_item['attributes_package_weight_value_name']=json_item['attributes'][30]['value_name']
+                            #Año de publicación orden[34]
+                            obj_item['attributes_publication_year_value_name']=json_item['attributes'][34]['value_name']
+                            #Garantia
+                            obj_item['warranty'] = json_item['warranty']
                             #Aca Crea
                             self.env["meli.order.items"].sudo().create(obj_item)
                         for payment in order["payments"]:

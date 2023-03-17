@@ -28,13 +28,26 @@ class MercadolibreOrdersItems(models.Model):
     full_unit_price= fields.Float('Precio unitario FULL') 
     base_exchange_rate= fields.Float('Tipo de cambio') 
     currency_id= fields.Char('Moneda')
+
+    #Categoria
+    category_id = fields.Char('Categoria')
+    #Iventario
+    inventory_id = fields.Char('Inventario')
+    #geolocalizacion
     geolocation = fields.Char('Geolocalización')
     #permalink
+    permalink = fields.Char('Enlace Permanente')
     #condicion
+    attributes_item_condition_value_name = fields.Char('Condicion')
     #Idioma
-    #Edad recomendad
+    attributes_languaje_value_name = fields.Char('Idioma')
+    #Edad maxima recomendada
+    attributes_max_recommended_age_value_name = fields.Char('Edad maxima recomendada')
     #Altura del paquete
+    attributes_package_height_value_name = fields.Char('Altura del paquete')
     #Peso del paquete
-    #Año de publicación
+    attributes_package_weight_value_name = fields.Char('Peso del paquete')
+    #Año de publicación 
+    attributes_publication_year_value_name = fields.Char('Año de publicación')
     #Garantia
-    #Categoria
+    warranty = fields.Char('Garantia') 
