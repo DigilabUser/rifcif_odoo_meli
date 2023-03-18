@@ -38,6 +38,8 @@
 					<field name="total_amount"></field>
 					<field name="paid_amount"></field>					
 					<field name="status"></field>
+                    <field name="logistic_type"></field>
+
 	        	</tree>
 	   		</field>
 	   	</record>
@@ -80,6 +82,8 @@
                                 <field name="date_last_updated"></field>
                                 <field name="date_closed"></field>
                                 <field name="last_updated"></field>
+                                <field name="logistic_type"></field>
+
                                 <!-- <field name="status_detail"></field> -->
                             </group>
 		  	
