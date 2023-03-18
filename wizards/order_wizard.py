@@ -122,6 +122,7 @@ class MLOrderWizard(models.TransientModel):
                         res = self.env["meli.order"].sudo().create(obj)
                         #Aca me traigo los items
                         for item in order["order_items"]:
+                            print("ITEM={}".format(item))
                             url_item = ITEM_URI.format(item["item"]["id"])
                             response_item = requests.get(url_item, headers=header)
                             json_item = json.loads(response_item.text)
