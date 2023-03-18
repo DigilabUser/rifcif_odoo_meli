@@ -38,6 +38,8 @@
 					<field name="total_amount"></field>
 					<field name="paid_amount"></field>					
 					<field name="status"></field>
+                    <field name="logistic_type" decoration-success="logistic_type == 'fulfillment'"></field>
+
 	        	</tree>
 	   		</field>
 	   	</record>
@@ -58,9 +60,10 @@
                             <group>
                                 <field name="shipping_id"></field>
                                 <field name="seller_id"></field>
+                                <field name="seller_nickname"></field>
                                 <field name="fulfilled"></field>
                                 <field name="buying_mode"></field>   
-                                <field name="buyer_id"></field>
+                                <field name="buyer_nickname"></field>
                                 <field name="pack_id" invisible="1"></field>
                                 <field name="coupon_id"></field>
                                 <field name="pickup_id"></field>
@@ -80,6 +83,8 @@
                                 <field name="date_last_updated"></field>
                                 <field name="date_closed"></field>
                                 <field name="last_updated"></field>
+                                <field name="logistic_type"></field>
+
                                 <!-- <field name="status_detail"></field> -->
                             </group>
 		  	
