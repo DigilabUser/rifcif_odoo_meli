@@ -40,14 +40,14 @@ class MercadolibreOrdersItems(models.Model):
     #condicion
     attributes_item_condition_value_name = fields.Char('Condicion')
     #Idioma
-    attributes_languaje_value_name = fields.Char('Idioma')
+    language = fields.Char('Idioma')
     #Edad maxima recomendada
-    attributes_max_recommended_age_value_name = fields.Char('Edad maxima recomendada')
+    max_recommended_age = fields.Char('Edad maxima recomendada')
     #Altura del paquete
-    attributes_package_height_value_name = fields.Char('Altura del paquete')
+    package_height = fields.Char('Altura del paquete')
     #Peso del paquete
-    attributes_package_weight_value_name = fields.Char('Peso del paquete')
+    package_weight = fields.Char('Peso del paquete')
     #Año de publicación 
-    attributes_publication_year_value_name = fields.Char('Año de publicación')
+    publication_year = fields.Char('Año de publicación')
     #Garantia
     warranty = fields.Char('Garantia') 

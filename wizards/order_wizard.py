@@ -127,9 +127,12 @@ class MLOrderWizard(models.TransientModel):
                             json_item = json.loads(response_item.text)
                             #obtengo el ISBN
                             isbn = ""
+                            lang = ""
                             for rec in json_item["attributes"]:
                                 if rec["id"] == "GTIN":
                                     isbn=rec["value_name"]
+                                if rec["id"] == "LANGUAGE":
+                                    lang = rec["value_name"]
                             print(json_item)
                             obj_item={}
                             obj_item["order_id"] = res.id
@@ -154,7 +157,7 @@ class MLOrderWizard(models.TransientModel):
                             #condicion orden[22]
                             obj_item['attributes_item_condition_value_name']=json_item['attributes'][22]['value_name']
                             #Idioma orden[23]
-                            obj_item['attributes_languaje_value_name']=json_item['attributes'][23]['value_name']
+                            obj_item['language']=lang
                             #Edad maxima recomendada orden[25]
                             obj_item['attributes_max_recommended_age_value_name']=json_item['attributes'][25]['value_name']
                             #Altura del paquete orden[28]

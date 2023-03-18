@@ -52,7 +52,7 @@ class MercadolibreShipments(models.Model):
     cost_components_gap_discount = fields.Float('Descuento brecha')
     cost_components_ratio = fields.Char('Relación')
 
-    id = fields.Char('Id')
+    shipping_id = fields.Char('N° de envío')
     tracking_method = fields.Char('Método de tracking')
     last_updated = fields.Datetime('Última actualización')
     items_types = fields.Char('Tipo de items')
