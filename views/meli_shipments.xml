@@ -7,8 +7,43 @@
         <field name="arch" type="xml">
             <form string="MercadoLibre Envíos">
                 <sheet>
-                    <group>
-                        
+                    <div class="title">
+                        <h1>
+                            <field name="order_id" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group col="4">
+                        <group string='General'>
+                            <field name="shipping_id"></field>
+                            <field name="receiver_id"></field>
+                            <field name="sender_id"></field>   
+                            <field name="order_cost"></field>
+                            <field name="service_id"></field>
+                            <field name="tracking_number"></field>
+                        </group>
+                    
+                        <group string='Datos del remitente'>                            
+                            <field name="sender_address_country_name"></field>
+                            <field name="sender_address_address_line"></field>
+                            <field name="sender_address_city_name"></field>
+                            <field name="sender_address_location_id"></field>							                            
+                            <field name="sender_address_street_name"></field>
+                            <field name="sender_address_comment"></field>                                  
+                        </group>
+                        <group string='Datos del receptor'>
+                            <field name="receiver_address_country_name"></field>
+                            <field name="receiver_address_address_line"></field>
+                            <field name="receiver_address_city_name"></field>                                
+                            <field name="receiver_address_location_id"></field>
+                            <field name="receiver_address_receiver_phone"></field>							                            
+                            <field name="receiver_address_comment"></field>                                  
+                        </group>
+                        <group string='Historial de estado'>
+                            <field name="date_shipped"></field>
+                            <field name="date_returned"></field>                                                             
+                            <field name="date_delivered"></field>
+                            <field name="date_ready_to_ship"></field>                          
+                        </group>
                     </group>
                 </sheet>
             </form>
@@ -20,7 +55,15 @@
         <field name="model">meli.shipments</field>
         <field name="arch" type="xml">
             <tree string="MercadoLibre Envíos">
-                
+                <field name="order_id"></field>
+				<field name="date_created"></field>
+				<field name="tracking_number"></field>
+                <field name="date_shipped"></field>
+				<field name="date_delivered"></field>
+                <field name="return_tracking_number"></field>
+				<field name="created_by"></field>
+                <field name="order_cost"></field>
+				<field name="status"></field>                
             </tree>
         </field>
     </record>

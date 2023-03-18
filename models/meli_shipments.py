@@ -46,7 +46,7 @@ class MercadolibreShipments(models.Model):
     
  
     # cost_components
-    cost_components_loyal_discount = fields.Float('Descuento ?????')
+    cost_components_loyal_discount = fields.Float('Descuento')
     cost_components_special_discount = fields.Float('Descuento especial')
     cost_components_compensation = fields.Float('Compensasión')
     cost_components_gap_discount = fields.Float('Descuento brecha')
