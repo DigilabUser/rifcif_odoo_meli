@@ -38,7 +38,7 @@ class MercadolibreOrdersItems(models.Model):
     #permalink
     permalink = fields.Char('Enlace Permanente')
     #condicion
-    attributes_item_condition_value_name = fields.Char('Condicion')
+    condition = fields.Char('Condicion')
     #Idioma
     language = fields.Char('Idioma')
     #Edad maxima recomendada
