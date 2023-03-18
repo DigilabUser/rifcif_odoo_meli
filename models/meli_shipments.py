@@ -154,11 +154,13 @@ class MercadolibreShipments(models.Model):
         order_ids = self.env["meli.order"].search([])
         for order in order_ids:
             #Solicitar los shipments
-            shipment_id = order["shipping_id"]
-            url_shipments = SHIPMENTS_URI.format(shipment_id)
+            shipment_id = order["ml_order_id"]
+            url_shipments = SHIPMENTS_URI.format(order["ml_order_id"])
             json_shipments = self.get_data_from_api(url_shipments,header)
             print(json_shipments)
             if json_shipments["status"]!=404:
+                print("\n\n---------------\n\n")
+                print(json_shipments)
                 obj={}
                 obj["receiver_id"] = json_shipments["receiver_id"]
                 obj["snapshot_packing"] = json_shipments["snapshot_packing"]
@@ -248,7 +250,7 @@ class MercadolibreShipments(models.Model):
                 obj["receiver_address_street_name"] = json_shipments["receiver_address"]["street_name"]
                 obj["receiver_address_zip_code"] = json_shipments["receiver_address"]["zip_code"]
                 obj["receiver_address_geolocation_source"] = json_shipments["receiver_address"]["geolocation_source"]
-                obj["receiver_address_delivery_preference"] = json_shipments["receiver_address"]["delivery_preference"]
+               #obj["receiver_address_delivery_preference"] = json_shipments["receiver_address"]["delivery_preference"]
                 obj["receiver_address_intersection"] = json_shipments["receiver_address"]["intersection"]
                 obj["receiver_address_street_number"] = json_shipments["receiver_address"]["street_number"]
                 obj["receiver_address_comment"] = json_shipments["receiver_address"]["comment"]
@@ -263,5 +265,9 @@ class MercadolibreShipments(models.Model):
                 obj["order_id "] = json_shipments["order_id"]
                 obj["status"] = json_shipments["status"]
                 obj["logistic_type"] = json_shipments["logistic_type"]
+                print(obj)
+                order.sudo().write({
+                    'logistic_type':json_shipments["logistic_type"]
+                })
 
                 #self.env["meli.shipments"].create(obj)
