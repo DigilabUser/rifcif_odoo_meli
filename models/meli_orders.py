@@ -67,7 +67,7 @@ class MercadolibreOrders(models.Model):
     pickup_id = fields.Char('Id recoger')
     status_detail = fields.Char('Estado detalle')
     buyer_nickname = fields.Char('Nombre comprador')
-    buyer_id = fields.Char('Comprador')
+    #buyer_id = fields.Char('Comprador')
     total_amount = fields.Integer('Cantidad total')
     paid_amount = fields.Float('Monto de pago')
     status= fields.Char('Estado')

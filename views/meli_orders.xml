@@ -58,9 +58,10 @@
                             <group>
                                 <field name="shipping_id"></field>
                                 <field name="seller_id"></field>
+                                <field name="seller_nickname"></field>
                                 <field name="fulfilled"></field>
                                 <field name="buying_mode"></field>   
-                                <field name="buyer_id"></field>
+                                <field name="buyer_nickname"></field>
                                 <field name="pack_id" invisible="1"></field>
                                 <field name="coupon_id"></field>
                                 <field name="pickup_id"></field>
