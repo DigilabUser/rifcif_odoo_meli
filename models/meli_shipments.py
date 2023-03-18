@@ -265,7 +265,8 @@ class MercadolibreShipments(models.Model):
                 obj["order_id "] = json_shipments["order_id"]
                 obj["status"] = json_shipments["status"]
                 obj["logistic_type"] = json_shipments["logistic_type"]
-                print(obj)
+                #'logistic_type':json_shipments["logistic_type"] if ____ else "not full"
+
                 order.sudo().write({
                     'logistic_type':json_shipments["logistic_type"]
                 })
