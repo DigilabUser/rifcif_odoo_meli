@@ -38,7 +38,7 @@
 					<field name="total_amount"></field>
 					<field name="paid_amount"></field>					
 					<field name="status"></field>
-                    <field name="logistic_type"></field>
+                    <field name="logistic_type" decoration-success="logistic_type == 'fulfillment'"></field>
 
 	        	</tree>
 	   		</field>
