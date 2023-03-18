@@ -162,6 +162,7 @@ class MercadolibreShipments(models.Model):
                 print("\n\n---------------\n\n")
                 print(json_shipments)
                 obj={}
+                obj["shipment_id"] = json_shipments["id"]
                 obj["receiver_id"] = json_shipments["receiver_id"]
                 obj["snapshot_packing"] = json_shipments["snapshot_packing"]
                 obj["base_cost"]=json_shipments["base_cost"]
@@ -240,13 +241,13 @@ class MercadolibreShipments(models.Model):
                 #Receiver address
                 obj["receiver_address_country_name"] = json_shipments["receiver_address"]["country"]["name"]
                 obj["receiver_address_address_line"] = json_shipments["receiver_address"]["address_line"]
-                obj["receiver_address_scoring"] = json_shipments["receiver_address"]["scoring"]
+                #obj["receiver_address_scoring"] = json_shipments["receiver_address"]["scoring"]
                 obj["receiver_address_agency"] = json_shipments["receiver_address"]["agency"]
                 obj["receiver_address_city_name"] = json_shipments["receiver_address"]["city"]["name"]
                 obj["receiver_address_geolocation_type"] = json_shipments["receiver_address"]["geolocation_type"]
                 obj["receiver_address_latitude"] = json_shipments["receiver_address"]["latitude"]
                 obj["receiver_address_municipality_name"] = json_shipments["receiver_address"]["municipality"]["name"]
-                obj["receiver_address_location_id"] = json_shipments["receiver_address"]["location_id"]
+                #obj["receiver_address_location_id"] = json_shipments["receiver_address"]["location_id"]
                 obj["receiver_address_street_name"] = json_shipments["receiver_address"]["street_name"]
                 obj["receiver_address_zip_code"] = json_shipments["receiver_address"]["zip_code"]
                 obj["receiver_address_geolocation_source"] = json_shipments["receiver_address"]["geolocation_source"]
@@ -265,10 +266,11 @@ class MercadolibreShipments(models.Model):
                 obj["order_id "] = json_shipments["order_id"]
                 obj["status"] = json_shipments["status"]
                 obj["logistic_type"] = json_shipments["logistic_type"]
-                #'logistic_type':json_shipments["logistic_type"] if ____ else "not full"
-
+                
+                #Aqui estoy actualizando ciertos campos del meli.order
                 order.sudo().write({
-                    'logistic_type':json_shipments["logistic_type"]
+                    'logistic_type':json_shipments["logistic_type"] if json_shipments["logistic_type"]=="fulfillment" else "not full",
+                    'shipping_status':json_shipments["status"]
                 })
 
                 #self.env["meli.shipments"].create(obj)

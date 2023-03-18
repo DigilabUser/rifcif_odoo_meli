@@ -72,3 +72,4 @@ class MercadolibreOrders(models.Model):
     paid_amount = fields.Float('Monto de pago')
     status= fields.Char('Estado')
     logistic_type = fields.Char('Tipo de logística')
+    shipping_status = fields.Char('Estado de envío')

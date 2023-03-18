@@ -36,9 +36,10 @@
 					<field name="buyer_nickname"></field>
                     <field name="shipping_cost"></field>
 					<field name="total_amount"></field>
-					<field name="paid_amount"></field>					
+					<!-- <field name="paid_amount"></field>					 -->
 					<field name="status"></field>
-                    <field name="logistic_type" decoration-success="logistic_type == 'fulfillment'"></field>
+                    <field name="logistic_type" decoration-success="logistic_type == 'fulfillment'" decoration-warning="logistic_type != 'fulfillment'"></field>
+                    <field name="shipping_status"></field>
 
 	        	</tree>
 	   		</field>
@@ -84,6 +85,7 @@
                                 <field name="date_closed"></field>
                                 <field name="last_updated"></field>
                                 <field name="logistic_type"></field>
+                                <field name="shipping_status"></field>
 
                                 <!-- <field name="status_detail"></field> -->
                             </group>
