@@ -19,7 +19,6 @@ class MercadolibreOrders(models.Model):
     #campos relacionados
     item_ids = fields.One2many('meli.order.items', 'order_id', string='Items')
     payment_ids = fields.One2many('meli.order.payments', 'order_id', string='payment')
-
     current_page = fields.Integer(default=1)
     #orders = fields.One2many('meli.order', 'order_id')
     # Order fieldsellerr el modelo
@@ -31,7 +30,7 @@ class MercadolibreOrders(models.Model):
     fulfilled = fields.Boolean('Fulfilled')
     buying_mode = fields.Char('Modo de compra')
     # Taxes
-    taxes_amount = fields.Integer('Cantidad')
+    taxes_amount = fields.Float('Impuestos')
  
     # order_request
     order_request_change = fields.Char('Cambio de pedido')
@@ -67,9 +66,34 @@ class MercadolibreOrders(models.Model):
     pickup_id = fields.Char('Id recoger')
     status_detail = fields.Char('Estado detalle')
     buyer_nickname = fields.Char('Nombre comprador')
-    #buyer_id = fields.Char('Comprador')
+    buyer_id = fields.Char('Comprador')
     total_amount = fields.Integer('Cantidad total')
     paid_amount = fields.Float('Monto de pago')
     status= fields.Char('Estado')
     logistic_type = fields.Char('Tipo de logística')
     shipping_status = fields.Char('Estado de envío')
+    sale_order_id = fields.Many2one('sale.order', string='Orden de Venta')
+    delivery_address = fields.Char('Dirección de entrega')
+
+
+    def create_sale_order_from_meli_order(self):
+        print("Hola Milagros")
+        meli_order_ids = self.env['meli.order'].search([('logistic_type','=','not full'),('sale_order_id','=',False)])
+        for meli_order in meli_order_ids:
+            #aca creo mi cliente.
+            partner_exist = self.env["res.partner"].search([('ref','=',meli_order['buyer_id'])])
+            if len(partner_exist)==0:
+                new_partner = self.env['res.partner'].sudo().create({
+                    'name':meli_order['buyer_nickname'],
+                    'ref':meli_order['buyer_id'],
+                    'street':meli_order['delivery_address'],
+                     'customer_rank':1
+                })
+                partner_exist = new_partner
+            #aca voy a crear mi orden de venta
+            obj={}
+            obj['partner_id']=partner_exist['id']
+            print(obj)
+            # obj['date_order']=sale['date_order']
+            # obj['name']=sale['name']
+            # obj['amount_total']=sale['amount_total']

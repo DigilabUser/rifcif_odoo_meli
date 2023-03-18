@@ -6,14 +6,15 @@
 			<field name="model">meli.order</field>
 	        <field name="arch" type="xml">
 		       	<tree string="MercadoLibre Ordenes">   
+					<field name="date_created"></field>
                     <field name="ml_order_id"></field> 
             		<!-- <field name="seller_id"></field>
 					<field name="fulfilled"></field> -->
 					<!-- <field name="buying_mode"></field> -->
-					<field name="taxes_amount"></field>
+					<!-- <field name="taxes_amount"></field> -->
 					<!-- <field name="order_request_change"></field> -->
 					<!-- <field name="order_requerest_return"></field> -->
-					<field name="expiration_date"></field>
+					<!-- <field name="expiration_date"></field> -->
 					<!-- <field name="feedback_sale"></field>
 					<field name="feedback_purchase"></field> -->
 					<field name="shipping_id"></field>
@@ -27,20 +28,19 @@
 					<field name="coupon_amount"></field>
 					<field name="coupon_id"></field> -->
 					
-					<field name="date_created"></field>
                     <!-- <field name="date_closed"></field> -->
 					<!-- <field name="aplication_id"></field> -->
 					<!-- <field name="pickup_id"></field> -->
-					<field name="status_detail"></field>
+					<!-- <field name="status_detail"></field> -->
 					<!-- <field name="buyer_name"></field> -->
 					<field name="buyer_nickname"></field>
-                    <field name="shipping_cost"></field>
+                    <!-- <field name="shipping_cost"></field> -->
 					<field name="total_amount"></field>
 					<!-- <field name="paid_amount"></field>					 -->
 					<field name="status"></field>
                     <field name="logistic_type" decoration-success="logistic_type == 'not full' and shipping_status == 'ready_to_ship'" decoration-warning="logistic_type == 'not full' and shipping_status != 'ready_to_ship'"></field>
                     <field name="shipping_status" decoration-success="shipping_status == 'ready_to_ship' and logistic_type == 'not full'" decoration-warning="shipping_status == 'ready_to_ship' and logistic_type != 'not full'"></field>
-
+                    <field name="sale_order_id"></field>
 	        	</tree>
 	   		</field>
 	   	</record>
@@ -64,7 +64,9 @@
                                 <field name="seller_nickname"></field>
                                 <field name="fulfilled"></field>
                                 <field name="buying_mode"></field>   
+                                <field name="buyer_id"></field>
                                 <field name="buyer_nickname"></field>
+                                <field name="delivery_address"></field>
                                 <field name="pack_id" invisible="1"></field>
                                 <field name="coupon_id"></field>
                                 <field name="pickup_id"></field>
@@ -76,7 +78,9 @@
                                 <field name="total_amount"></field>
                                 <field name="paid_amount"></field>							                            
                                 <field name="comments"></field>
-                                <field name="status"></field>                                  
+                                <field name="status"></field>  
+                                <field name="sale_order_id"></field>
+
                             </group>
                             <group>
                                 <field name="date_created"></field>

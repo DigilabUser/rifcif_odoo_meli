@@ -111,7 +111,7 @@ class MLOrderWizard(models.TransientModel):
                     obj["pickup_id"]=order["pickup_id"]
                     obj["status_detail"]=order["status_detail"]
                     obj["buyer_nickname"]=order["buyer"]["nickname"]
-                    #obj["buyer_id"]=order["buyer"]["id"]
+                    obj["buyer_id"]=order["buyer"]["id"]
                     obj["total_amount"]=order["total_amount"]
                     obj["paid_amount"]=order["paid_amount"]
                     obj["status"]=order["status"]                   

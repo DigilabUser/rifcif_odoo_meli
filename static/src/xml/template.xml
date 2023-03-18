@@ -30,6 +30,12 @@
             <!-- <button name="testing_python" type="object" class="btn btn-warning o_button_to_sync_meli_ventas">Sincronizar MercadoLibre</button> -->
             <button name="openWizard" type="object" class="btn btn-info o_button_to_sync_meli_shipments">Sincronizar Envíos MercadoLibre</button>
            </t>
-        </t>                                     
+        </t>           
+        <t t-jquery="button.o_list_button_add" t-operation="after">
+            <t t-if="widget.modelName == 'meli.order'">
+            <!-- <button name="testing_python" type="object" class="btn btn-warning o_button_to_sync_meli_ventas">Sincronizar MercadoLibre</button> -->
+            <button name="openWizard" type="object" class="btn btn-success o_button_to_sync_meli_sale_orders">Crear Ordenes de venta</button>
+           </t>
+        </t>                                          
     </t>
 </template>

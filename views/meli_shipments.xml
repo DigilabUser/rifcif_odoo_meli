@@ -9,12 +9,12 @@
                 <sheet>
                     <div class="title">
                         <h1>
-                            <field name="order_id" readonly="1"/>
+                            <field name="shipping_id" readonly="1"/>
                         </h1>
                     </div>
                     <group col="4">
                         <group string='General'>
-                            <field name="shipping_id"></field>
+                            <field name="num_order"></field>
                             <field name="receiver_id"></field>
                             <field name="sender_id"></field>   
                             <field name="order_cost"></field>
@@ -38,12 +38,12 @@
                             <field name="receiver_address_receiver_phone"></field>							                            
                             <field name="receiver_address_comment"></field>                                  
                         </group>
-                        <group string='Historial de estado'>
+                        <!-- <group string='Historial de estado'>
                             <field name="date_shipped"></field>
                             <field name="date_returned"></field>                                                             
                             <field name="date_delivered"></field>
                             <field name="date_ready_to_ship"></field>                          
-                        </group>
+                        </group> -->
                     </group>
                 </sheet>
             </form>
@@ -55,7 +55,7 @@
         <field name="model">meli.shipments</field>
         <field name="arch" type="xml">
             <tree string="MercadoLibre Envíos">
-                <field name="order_id"></field>
+                <field name="num_order"></field>
 				<field name="date_created"></field>
 				<field name="tracking_number"></field>
                 <field name="date_shipped"></field>

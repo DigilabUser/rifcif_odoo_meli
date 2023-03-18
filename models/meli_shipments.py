@@ -20,6 +20,7 @@ ALBERT_ID='422252521'
 
 class MercadolibreShipments(models.Model):
     _name = 'meli.shipments'
+    _rec_name="shipping_id"
 #Campos no relacionales
     
     snapshot_packing = fields.Char('Paquete instantánea') # Ya esta
@@ -126,11 +127,11 @@ class MercadolibreShipments(models.Model):
 
 
     customer_id = fields.Char('Id de cliente')
-    order_id = fields.Char('Id de orden')
+    #sh_order_id = fields.Char('Id de orden')
     status = fields.Char('Estado')
     logistic_type = fields.Char('Tipo de logística')
 
-
+    num_order = fields.Char('N° Orden')
 
     def get_data_from_api(self, uri, header):
         """
@@ -157,26 +158,25 @@ class MercadolibreShipments(models.Model):
             shipment_id = order["ml_order_id"]
             url_shipments = SHIPMENTS_URI.format(order["ml_order_id"])
             json_shipments = self.get_data_from_api(url_shipments,header)
-            print(json_shipments)
+        #    print("\n\n{}\n\n".format(json_shipments))
             if json_shipments["status"]!=404:
                 print("\n\n---------------\n\n")
                 print(json_shipments)
                 obj={}
-                obj["shipment_id"] = json_shipments["id"]
+                obj["shipping_id"] = json_shipments["id"]
                 obj["receiver_id"] = json_shipments["receiver_id"]
                 obj["snapshot_packing"] = json_shipments["snapshot_packing"]
                 obj["base_cost"]=json_shipments["base_cost"]
 
                 #Status_history
-                obj["date_shipped"]=json_shipments["status_history"]["date_shipped"]
-                obj["date_returned"]=json_shipments["status_history"]["date_returned"]
-                obj["date_delivered"]=json_shipments["status_history"]["date_delivered"]
-                obj["date_first_visit"]=json_shipments["status_history"]["date_first_visit"]
-                obj["date_not_delivered"]=json_shipments["status_history"]["date_not_delivered"]
-                obj["date_cancelled"]=json_shipments["status_history"]["date_cancelled"]
-                obj["date_handling"]=json_shipments["status_history"]["date_handling"]
-                obj["date_ready_to_ship"]=json_shipments["status_history"]["date_ready_to_ship"]
-
+                #obj["date_shipped"]=datetime(int(json_shipments["status_history"]["date_shipped"][0:4]),int(json_shipments["status_history"]["date_shipped"][5:7]),int(json_shipments["status_history"]["date_shipped"][8:10]),int(json_shipments["status_history"]["date_shipped"][11:13]),int(json_shipments["status_history"]["date_shipped"][14:16]),int(json_shipments["status_history"]["date_shipped"][17:19]))+timedelta(hours=5)                
+                #obj["date_returned"]=datetime(int(json_shipments["status_history"]["date_returned"][0:4]),int(json_shipments["status_history"]["date_returned"][5:7]),int(json_shipments["status_history"]["date_returned"][8:10]),int(json_shipments["status_history"]["date_returned"][11:13]),int(json_shipments["status_history"]["date_returned"][14:16]),int(json_shipments["status_history"]["date_returned"][17:19]))+timedelta(hours=5)
+                #obj["date_delivered"]=datetime(int(json_shipments["status_history"]["date_delivered"][0:4]),int(json_shipments["status_history"]["date_delivered"][5:7]),int(json_shipments["status_history"]["date_delivered"][8:10]),int(json_shipments["status_history"]["date_delivered"][11:13]),int(json_shipments["status_history"]["date_delivered"][14:16]),int(json_shipments["status_history"]["date_delivered"][17:19]))+timedelta(hours=5)
+                #obj["date_first_visit"]=datetime(int(json_shipments["status_history"]["date_first_visit"][0:4]),int(json_shipments["status_history"]["date_first_visit"][5:7]),int(json_shipments["status_history"]["date_first_visit"][8:10]),int(json_shipments["status_history"]["date_first_visit"][11:13]),int(json_shipments["status_history"]["date_first_visit"][14:16]),int(json_shipments["status_history"]["date_first_visit"][17:19]))+timedelta(hours=5)
+                #obj["date_not_delivered"]=datetime(int(json_shipments["status_history"]["date_not_delivered"][0:4]),int(json_shipments["status_history"]["date_not_delivered"][5:7]),int(json_shipments["status_history"]["date_not_delivered"][8:10]),int(json_shipments["status_history"]["date_not_delivered"][11:13]),int(json_shipments["status_history"]["date_not_delivered"][14:16]),int(json_shipments["status_history"]["date_not_delivered"][17:19]))+timedelta(hours=5)
+                #obj["date_cancelled"]=datetime(int(json_shipments["status_history"]["date_cancelled"][0:4]),int(json_shipments["status_history"]["date_cancelled"][5:7]),int(json_shipments["status_history"]["date_cancelled"][8:10]),int(json_shipments["status_history"]["date_cancelled"][11:13]),int(json_shipments["status_history"]["date_cancelled"][14:16]),int(json_shipments["status_history"]["date_cancelled"][17:19]))+timedelta(hours=5)
+                #obj["date_handling"]=datetime(int(json_shipments["status_history"]["date_handling"][0:4]),int(json_shipments["status_history"]["date_handling"][5:7]),int(json_shipments["status_history"]["date_handling"][8:10]),int(json_shipments["status_history"]["date_handling"][11:13]),int(json_shipments["status_history"]["date_handling"][14:16]),int(json_shipments["status_history"]["date_handling"][17:19]))+timedelta(hours=5)
+                #obj["date_ready_to_ship"]=datetime(int(json_shipments["status_history"]["date_ready_to_ship"][0:4]),int(json_shipments["status_history"]["date_ready_to_ship"][5:7]),int(json_shipments["status_history"]["date_ready_to_ship"][8:10]),int(json_shipments["status_history"]["date_ready_to_ship"][11:13]),int(json_shipments["status_history"]["date_ready_to_ship"][14:16]),int(json_shipments["status_history"]["date_ready_to_ship"][17:19]))+timedelta(hours=5)
                 obj["type"]=json_shipments["type"]
                 obj["return_details"]=json_shipments["return_details"]
                 obj["sender_id"]=json_shipments["sender_id"]
@@ -192,14 +192,13 @@ class MercadolibreShipments(models.Model):
                 obj["cost_components_gap_discount"]=json_shipments["cost_components"]["gap_discount"]
                 obj["cost_components_ratio"]=json_shipments["cost_components"]["ratio"]
 
-                obj["id"]=json_shipments["id"]
                 obj["tracking_method"]=json_shipments["tracking_method"]
-                obj["last_updated"]=json_shipments["last_updated"]
+                #obj["last_updated"]=json_shipments["last_updated"]
                 obj["items_types"]=json_shipments["items_types"]
                 obj["comments"]=json_shipments["comments"]
                 obj["substatus"]=json_shipments["substatus"]
-                obj["date_created"]=json_shipments["date_created"]
-                obj["date_first_printed"]=json_shipments["date_first_printed"]
+                #obj["date_created"]=json_shipments["date_created"]
+                #obj["date_first_printed"]=json_shipments["date_first_printed"]
                 obj["created_by"]=json_shipments["created_by"]
                 obj["application_id"]=json_shipments["application_id"]
                 
@@ -222,7 +221,7 @@ class MercadolibreShipments(models.Model):
                 obj["sender_address_id"]=json_shipments["sender_address"]["id"]
                 obj["sender_address_state_name"]=json_shipments["sender_address"]["state"]["name"]
                 obj["sender_address_neighborhood_name"]=json_shipments["sender_address"]["neighborhood"]["name"]
-                obj["sender_address_geolocation_last_updated"]=json_shipments["sender_address"]["geolocation_last_updated"]
+                #obj["sender_address_geolocation_last_updated"]=json_shipments["sender_address"]["geolocation_last_updated"]
                 obj["sender_address_longitude"]=json_shipments["sender_address"]["longitude"]
 
                 # Sibling
@@ -230,8 +229,8 @@ class MercadolibreShipments(models.Model):
                 obj["sibling_sibling_id"] = json_shipments["sibling"]["sibling_id"]
                 obj["sibling_description"] = json_shipments["sibling"]["description"]
                 obj["sibling_source"] = json_shipments["sibling"]["source"]
-                obj["sibling_date_created"] = json_shipments["sibling"]["date_created"]
-                obj["sibling_last_updated"] = json_shipments["sibling"]["last_updated"]
+                #obj["sibling_date_created"] = json_shipments["sibling"]["date_created"]
+                #obj["sibling_last_updated"] = json_shipments["sibling"]["last_updated"]
 
                 obj["return_tracking_number"] = json_shipments["return_tracking_number"]
                 obj["site_id"] = json_shipments["site_id"]
@@ -258,19 +257,22 @@ class MercadolibreShipments(models.Model):
                 obj["receiver_address_id"] = json_shipments["receiver_address"]["id"]
                 obj["receiver_address_state_name"] = json_shipments["receiver_address"]["state"]["name"]
                 obj["receiver_address_neighborhood_name"] = json_shipments["receiver_address"]["neighborhood"]["name"]
-                obj["receiver_address_geolocation_last_updated"] = json_shipments["receiver_address"]["geolocation_last_updated"]
+                #obj["receiver_address_geolocation_last_updated"] = json_shipments["receiver_address"]["geolocation_last_updated"]
                 obj["receiver_address_receiver_phone"] = json_shipments["receiver_address"]["receiver_phone"]
                 obj["receiver_address_longitude"] = json_shipments["receiver_address"]["longitude"]
 
                 obj["customer_id"] = json_shipments["customer_id"]
-                obj["order_id "] = json_shipments["order_id"]
+                obj["num_order"] =str(order["ml_order_id"])
                 obj["status"] = json_shipments["status"]
                 obj["logistic_type"] = json_shipments["logistic_type"]
                 
                 #Aqui estoy actualizando ciertos campos del meli.order
                 order.sudo().write({
                     'logistic_type':json_shipments["logistic_type"] if json_shipments["logistic_type"]=="fulfillment" else "not full",
-                    'shipping_status':json_shipments["status"]
+                    'shipping_status':json_shipments["status"],
+                    'delivery_address':json_shipments["receiver_address"]["address_line"]
                 })
+                shipping_exist= self.env['meli.shipments'].search([('shipping_id','=', obj["shipping_id"])])
+                if len(shipping_exist)==0:
+                    self.env["meli.shipments"].create(obj)
 
-                #self.env["meli.shipments"].create(obj)
