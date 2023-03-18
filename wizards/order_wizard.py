@@ -128,11 +128,27 @@ class MLOrderWizard(models.TransientModel):
                             #obtengo el ISBN
                             isbn = ""
                             lang = ""
+                            cond = ""
+                            max_age = "" 
+                            height = ""
+                            weight = ""
+                            publi = ""
                             for rec in json_item["attributes"]:
                                 if rec["id"] == "GTIN":
                                     isbn=rec["value_name"]
                                 if rec["id"] == "LANGUAGE":
                                     lang = rec["value_name"]
+                                if rec["id"] == "ITEM_CONDITION":
+                                    cond = rec["value_name"] 
+                                if rec["id"] == "MAX_RECOMMENDED_AGE":
+                                    max_age = rec["value_name"]
+                                if rec["id"] == "PACKAGE_HEIGHT":
+                                    height = rec["value_name"]
+                                if rec["id"] == "PACKAGE_WEIGHT":
+                                    weight = rec["value_name"]
+                                if rec["id"] == "PUBLICATION_YEAR":
+                                    publi = rec["value_name"]
+                                
                             print(json_item)
                             obj_item={}
                             obj_item["order_id"] = res.id
@@ -155,17 +171,17 @@ class MLOrderWizard(models.TransientModel):
                             #permalink
                             obj_item['permalink']=json_item['permalink']
                             #condicion orden[22]
-                            obj_item['attributes_item_condition_value_name']=json_item['attributes'][22]['value_name']
+                            obj_item['condition']=cond
                             #Idioma orden[23]
                             obj_item['language']=lang
                             #Edad maxima recomendada orden[25]
-                            obj_item['attributes_max_recommended_age_value_name']=json_item['attributes'][25]['value_name']
+                            obj_item['max_recommended_age']=max_age
                             #Altura del paquete orden[28]
-                            obj_item['attributes_package_height_value_name']=json_item['attributes'][28]['value_name']
+                            obj_item['package_height']=height
                             #Peso del paquete orden[30]
-                            obj_item['attributes_package_weight_value_name']=json_item['attributes'][30]['value_name']
+                            obj_item['package_weight']=weight
                             #Año de publicación orden[34]
-                            obj_item['attributes_publication_year_value_name']=json_item['attributes'][34]['value_name']
+                            obj_item['publication_year']=publi
                             #Garantia
                             obj_item['warranty'] = json_item['warranty']
                             #Aca Crea
