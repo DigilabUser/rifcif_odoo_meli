@@ -106,21 +106,10 @@ class MercadolibreOrders(models.Model):
         #Me traigo todas las MELI order que sean not full
         meli_order_ids = self.env['meli.order'].search([('logistic_type','=','not full'),('sale_order_id','=',False)])
         #Las recorro
-        for meli_order in meli_order_ids:
-
-            #aca creo mi cliente.
-            #Consumir el API BILLING con el meli_order["ml_order_id"]
-            #https://api.mercadolibre.com/orders/{}/billing_info <--- de aca vas a traer el doc_number
-            #Hacer busqueda con el numero de doc partner_exist = self.env["res.partner"].search([('vat','=',numero de documento)])
-            #json_billing = self.get_data_from_api(url_billing,header)
-            #--------
-            
+        for meli_order in meli_order_ids:            
             order_id= meli_order["ml_order_id"]
             url_billing= BILLING_URI.format(order_id)
-            json_billing= self.get_data_from_api(url_billing, header)
-            
-            #print(json_billing)
-            
+            json_billing= self.get_data_from_api(url_billing, header)    
 
             number_doc = json_billing["billing_info"]["doc_number"]
 
@@ -135,8 +124,6 @@ class MercadolibreOrders(models.Model):
             # data_las_name = ""
 
             for data in json_billing["billing_info"]["additional_info"]:
-                # if data["type"] == "LAST_NAME":
-                #     data_las_name= data["value"]
                 if data["type"] == "DOC_NUMBER":
                     data_ruc = data["value"]
                 if data["type"] == "FIRST_NAME":
@@ -170,14 +157,12 @@ class MercadolibreOrders(models.Model):
             obj={}
             obj['partner_id']=partner_exist['id']
             obj['order_ml']=meli_order['ml_order_id']
-            #obj['partner_invoice_id'] = partner_exist['street']
-            #obj['vat'] = partner_exist['vat']
             obj['date_order']=meli_order['date_created']
-            obj['amount_total']=meli_order['total_amount']             
+            obj['amount_total']=meli_order['total_amount']  
+            #Creo la orden           
             sale_order = self.env["sale.order"].create(obj)
-
+            #Creo las lineas de pedido
             for line in meli_order["item_ids"]:
-
                 product_id = self.env['product.template'].search([('isbn','=', line['isbn'])])
                 if product_id:
                     line_vals = {
@@ -190,6 +175,7 @@ class MercadolibreOrders(models.Model):
                     }
                     print(line_vals)
                     self.env['sale.order.line'].create(line_vals)
+            #Busco la orden creada
             order= self.env['sale.order'].search([('id','=',sale_order.id)])
             meli_order.sudo().write({
                 'sale_order_id':order.id
