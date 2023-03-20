@@ -128,6 +128,7 @@ class MercadolibreOrders(models.Model):
 
             # Variables locales
             data_name = ""
+            data_lastname = ""
             data_ruc = ""
             data_stree_name = ""
             data_stree_number = ""
@@ -140,12 +141,14 @@ class MercadolibreOrders(models.Model):
                     data_ruc = data["value"]
                 if data["type"] == "FIRST_NAME":
                     data_name = data["value"]
+                if data["type"] == "LAST_NAME":
+                    data_lastname = data["value"]                    
                 if data["type"] == "STREET_NAME":
                     data_stree_name = data["value"]
                 if data["type"] == "STREET_NUMBER":
                     data_stree_number = data["value"]
 
-
+            data_name = data_name + " " + data_lastname
             data_street =  data_stree_name + " " + data_stree_number
             # print(data_name)
             # print(data_las_name)
@@ -166,11 +169,28 @@ class MercadolibreOrders(models.Model):
             # aca voy a crear mi orden de venta
             obj={}
             obj['partner_id']=partner_exist['id']
-            obj['name'] = partner_exist['name']
-            obj['vat'] = partner_exist['vat']
-            obj['street'] = partner_exist['street']
-            obj['street'] = partner_exist['street']
-            print(obj)
-            # obj['date_order']=sale['date_order']
-            # obj['name']=sale['name']
-            # obj['amount_total']=sale['amount_total']
+            obj['order_ml']=meli_order['ml_order_id']
+            #obj['partner_invoice_id'] = partner_exist['street']
+            #obj['vat'] = partner_exist['vat']
+            obj['date_order']=meli_order['date_created']
+            obj['amount_total']=meli_order['total_amount']             
+            sale_order = self.env["sale.order"].create(obj)
+
+            for line in meli_order["item_ids"]:
+
+                product_id = self.env['product.template'].search([('isbn','=', line['isbn'])])
+                if product_id:
+                    line_vals = {
+                        'order_id': sale_order.id,
+                        'product_id': product_id.id,
+                        'product_uom_qty': line['quantity'],
+                        'price_unit': line['unit_price'],
+                        'name': line['title'],
+                        'display_type': False,
+                    }
+                    print(line_vals)
+                    self.env['sale.order.line'].create(line_vals)
+            order= self.env['sale.order'].search([('id','=',sale_order.id)])
+            meli_order.sudo().write({
+                'sale_order_id':order.id
+            })
