@@ -77,19 +77,30 @@ class MercadolibreOrders(models.Model):
 
 
     def create_sale_order_from_meli_order(self):
-        print("Hola Milagros")
+        #Me traigo todas las MELI order que sean not full
         meli_order_ids = self.env['meli.order'].search([('logistic_type','=','not full'),('sale_order_id','=',False)])
+        #Las recorro
         for meli_order in meli_order_ids:
             #aca creo mi cliente.
-            partner_exist = self.env["res.partner"].search([('ref','=',meli_order['buyer_id'])])
+            #Consumir el API BILLING con el meli_order["ml_order_id"]
+            #https://api.mercadolibre.com/orders/{}/billing_info <--- de aca vas a traer el doc_number
+            #Hacer busqueda con el numero de doc partner_exist = self.env["res.partner"].search([('vat','=',numero de documento)])
+            #json_billing = self.get_data_from_api(url_billing,header)
+            #--------
+            
+            #partner_exist = self.env["res.partner"].search([('vat','=',doc_number)])
+            #El cliente no existe
             if len(partner_exist)==0:
+                #Si el cliente no existe, lo creo
                 new_partner = self.env['res.partner'].sudo().create({
-                    'name':meli_order['buyer_nickname'],
-                    'ref':meli_order['buyer_id'],
+                    'name':'prueba',
+                    'lastname':'prueba',
+                    'vat':'prueba',
                     'street':meli_order['delivery_address'],
                      'customer_rank':1
                 })
                 partner_exist = new_partner
+            #_---------
             #aca voy a crear mi orden de venta
             obj={}
             obj['partner_id']=partner_exist['id']
