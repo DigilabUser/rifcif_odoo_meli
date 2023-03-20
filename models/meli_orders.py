@@ -12,6 +12,11 @@ from datetime import datetime
 from datetime import timedelta
 from odoo.exceptions import ValidationError
 _logger = logging.getLogger(__name__)
+
+API_URI = 'https://api.mercadolibre.com'
+ORDERS_URI = API_URI + '/orders/'
+BILLING_URI = ORDERS_URI + '{}/billing_info'
+
 class MercadolibreOrders(models.Model):
     _name = 'meli.order'
     _rec_name="ml_order_id"
@@ -76,11 +81,33 @@ class MercadolibreOrders(models.Model):
     delivery_address = fields.Char('Dirección de entrega')
 
 
+    def get_data_from_api(self, uri, header):
+        """
+        Función que nos permite consumir un API RestFUL y que nos devuelve la respuesta
+
+        Attributes:
+            uri (str): Endpoint donde se va a consumir
+            header (str): Cabecera
+        """
+        response = requests.get(uri, headers=header)
+        json_response = json.loads(response.text)
+        return json_response 
+
     def create_sale_order_from_meli_order(self):
+
+        #Obtener el token
+        connector_obj = self.env['meli.connector'].search([])
+        for conn in connector_obj:
+            token = conn.token
+        header = {'Authorization': 'Bearer '+ token}       
+        #Traerme todas las ordenes descargadas
+
+
         #Me traigo todas las MELI order que sean not full
         meli_order_ids = self.env['meli.order'].search([('logistic_type','=','not full'),('sale_order_id','=',False)])
         #Las recorro
         for meli_order in meli_order_ids:
+
             #aca creo mi cliente.
             #Consumir el API BILLING con el meli_order["ml_order_id"]
             #https://api.mercadolibre.com/orders/{}/billing_info <--- de aca vas a traer el doc_number
@@ -88,22 +115,61 @@ class MercadolibreOrders(models.Model):
             #json_billing = self.get_data_from_api(url_billing,header)
             #--------
             
-            #partner_exist = self.env["res.partner"].search([('vat','=',doc_number)])
-            #El cliente no existe
+            order_id= meli_order["ml_order_id"]
+            url_billing= BILLING_URI.format(order_id)
+            json_billing= self.get_data_from_api(url_billing, header)
+            
+            #print(json_billing)
+            
+
+            number_doc = json_billing["billing_info"]["doc_number"]
+
+            partner_exist = self.env["res.partner"].search([('vat','=',number_doc)])
+
+            # Variables locales
+            data_name = ""
+            data_ruc = ""
+            data_stree_name = ""
+            data_stree_number = ""
+            # data_las_name = ""
+
+            for data in json_billing["billing_info"]["additional_info"]:
+                # if data["type"] == "LAST_NAME":
+                #     data_las_name= data["value"]
+                if data["type"] == "DOC_NUMBER":
+                    data_ruc = data["value"]
+                if data["type"] == "FIRST_NAME":
+                    data_name = data["value"]
+                if data["type"] == "STREET_NAME":
+                    data_stree_name = data["value"]
+                if data["type"] == "STREET_NUMBER":
+                    data_stree_number = data["value"]
+
+
+            data_street =  data_stree_name + " " + data_stree_number
+            # print(data_name)
+            # print(data_las_name)
+            # print(data_ruc)
+
+            # #El cliente no existe
             if len(partner_exist)==0:
-                #Si el cliente no existe, lo creo
+                 # Si el cliente no existe, lo creo
                 new_partner = self.env['res.partner'].sudo().create({
-                    'name':'prueba',
-                    'lastname':'prueba',
-                    'vat':'prueba',
-                    'street':meli_order['delivery_address'],
-                     'customer_rank':1
+                    'name': data_name,
+                    #'lastname': data_las_name,
+                    'vat': data_ruc,
+                    'street': data_street,
+                    'customer_rank':1
                 })
                 partner_exist = new_partner
-            #_---------
-            #aca voy a crear mi orden de venta
+            # ---------
+            # aca voy a crear mi orden de venta
             obj={}
             obj['partner_id']=partner_exist['id']
+            obj['name'] = partner_exist['name']
+            obj['vat'] = partner_exist['vat']
+            obj['street'] = partner_exist['street']
+            obj['street'] = partner_exist['street']
             print(obj)
             # obj['date_order']=sale['date_order']
             # obj['name']=sale['name']
