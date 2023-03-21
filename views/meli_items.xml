@@ -28,17 +28,17 @@
 		    <form string="MeLi Items">
 		       	<sheet>
                     <div class="row">
-                        <div class="col-8">
+                        <div class="col-10">
                             <h1>
                                 <field name="title" readonly="1"/>
                             </h1>
                         </div>
 
-                        <div class="col-4">
-                            <field name="pictures" widget="image"></field>
+                        <div class="col-2">
+                            <field name="pictures" widget="image" style="width: 110px"></field>
                         </div>
                     </div>
-		       	  	<group col="12">
+		       	  	<group col="3">
                         <group string='Información del libro'> 
                             <field name="id_items"></field>
                             <field name="category_id"></field>
