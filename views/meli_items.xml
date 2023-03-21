@@ -31,15 +31,16 @@
                         <h1>
                             <field name="title" readonly="1"/>
                         </h1>
+
+                        <field name="pictures" widget="image" class="oe_avatar"></field>
+
                     </div>
-		       	  	<group col="3">
+		       	  	<group col="12">
                         <group string='Información del libro'> 
                             <field name="id_items"></field>
-                            <field name="title"></field>
                             <field name="category_id"></field>
                             <field name="price"></field>
                             <field name="warranty"></field>
-                            <field name="pictures"></field>
                             <field name="author"></field>
                             <field name="book_genre"></field>
                             <field name="language"></field>
@@ -50,18 +51,17 @@
                             <field name="available_quantity"></field>
                             <field name="initial_quantity"></field>
                             <field name="sold_quantity"></field>
-                            <field name="geolocation"></field>
+                            <field name="geolocation" widget="url"></field>
                             <field name="isbn"></field>                             
                         </group>
                         <group string='Otros'>
                             <field name="currency_id"></field>                                                             
-                            <field name="logistic_type"></field>
+                            <field name="logistic_type" decoration-success="logistic_type == 'not full'"></field>
                             <field name="base_price"></field>
                             <field name="tags"></field>
-                            <field name="permalink"></field>
+                            <field name="permalink" widget="url"></field>
                             <field name="book_cover"></field>
                             <field name="max_recommended_age"></field>
-                            
                         </group>
                     </group>
 		        </sheet>
