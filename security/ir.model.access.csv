@@ -6,6 +6,7 @@ access_meli_order_admin,access.meli.order.admin,model_meli_order,,1,1,1,1
 access_meli_order_items_admin,access.meli.order_items.admin,model_meli_order_items,,1,1,1,1
 access_meli_order_payments_admin,access.meli.order_payments.admin,model_meli_order_payments,,1,1,1,1
 access_meli_shipments_admin,access.meli.shipments.admin,model_meli_shipments,,1,1,1,1
+access_meli_items_admin,access.meli.items.admin,model_meli_items,,1,1,1,1
 access_meli_sales_admin_wizard,access.meli.sales.admin.wizard,model_meli_sales_wizard,,1,1,1,1
 access_meli_order_admin_wizard,access.meli.order.admin.wizard,model_meli_order_wizard,,1,1,1,1
 access_meli_multi_ticket_wizard,access.meli.multi.ticket.wizard,model_meli_multi_ticket_wizard,,1,1,1,1
