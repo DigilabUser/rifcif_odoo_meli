@@ -93,14 +93,15 @@ class MercadolibreItems(models.Model):
         # Consumo de Api usuario para traer id item
         for item in json_items_user["results"]:
 
-            # Trayendo el json para la description del item
-            url_item_user = ITEM_URI.format(item)
-            json_item = self.get_data_from_api(url_item_user, header)
-
             # Validando si el cliente existe:
-            partner_exist = self.env["meli.items"].search([('id_items','=',json_item['id'])])
+            partner_exist = self.env["meli.items"].search([('id_items','=',item)])
 
             if len(partner_exist) == 0:
+
+                # Trayendo el json para la description del item
+                url_item_user = ITEM_URI.format(item)
+                json_item = self.get_data_from_api(url_item_user, header)
+
                 # Validacion inventory id
                 if(json_item['inventory_id'] == None):
                     inventory = 'not full'
@@ -169,11 +170,9 @@ class MercadolibreItems(models.Model):
                 obj['isbn']=isbn_libro
                 obj['language']=idioma_libro
                 obj['max_recommended_age']=edad_maxima_libro
-                #obj['tags'] = json_item['tags']
+                obj['tags'] = json_item['tags']
 
                 # Creacion del objeto
                 self.env["meli.items"].create(obj)
                 print("Creando el objeto")
-
-        
         pass
