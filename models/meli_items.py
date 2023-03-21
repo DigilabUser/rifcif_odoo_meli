@@ -45,11 +45,11 @@ class MercadolibreItems(models.Model):
     category_id = fields.Char('Id de categoria')
     base_price = fields.Char('Precio base')
     condition= fields.Char('Condición del item')
-    warranty = fields.Char('Tipo de garantia') # Preguntar
+    warranty = fields.Char('Tipo de garantia')
     permalink = fields.Char('Link permanente')
-    pictures = fields.Binary('Imagen') # Preguntar
+    pictures = fields.Binary('Imagen')
     geolocation = fields.Char('Localización')
-    author = fields.Char('Autor') # Preguntar
+    author = fields.Char('Autor')
     book_cover = fields.Char('Tipo de tapa')
     book_genre = fields.Char('Género del libro')
     isbn = fields.Char('Codigo de barra')
@@ -97,78 +97,83 @@ class MercadolibreItems(models.Model):
             url_item_user = ITEM_URI.format(item)
             json_item = self.get_data_from_api(url_item_user, header)
 
-            # Validacion inventory id
-            if(json_item['inventory_id'] == None):
-                inventory = 'not full'
-            else:
-                inventory = json_item['inventory_id']
+            # Validando si el cliente existe:
+            partner_exist = self.env["meli.items"].search([('id_items','=',json_item['id'])])
 
-            # Para ubicacion
-            ubicacion = 'https://www.google.com.pe/maps/place/{},%20{}'
-            link_ubicacion = ubicacion.format(json_item['geolocation']['latitude'],json_item['geolocation']['longitude'])
+            if len(partner_exist) == 0:
+                # Validacion inventory id
+                if(json_item['inventory_id'] == None):
+                    inventory = 'not full'
+                else:
+                    inventory = json_item['inventory_id']
 
-            # Variables locales
-            autor = ''
-            material_libro = ''
-            genero_libro = ''
-            isbn_libro = ''
-            idioma_libro = ''
-            edad_maxima_libro = ''
-            garantia_libro = ''
+                # Para ubicacion
+                ubicacion = 'https://www.google.com.pe/maps/place/{},%20{}'
+                link_ubicacion = ubicacion.format(json_item['geolocation']['latitude'],json_item['geolocation']['longitude'])
 
-            # Extraer datos de atributo
-            for data in json_item['attributes']:
-                if data['id'] == 'AUTHOR':
-                    autor = data['value_name']
-                if data['id'] == 'BOOK_COVER_MATERIAL':
-                    material_libro = data['value_name']
-                if data['id'] == 'BOOK_GENRE':
-                    genero_libro = data['value_name']
-                if data['id'] == 'GTIN':
-                    isbn_libro = data['value_name']
-                if data['id'] == 'LANGUAGE':
-                    idioma_libro = data['value_name']
-                if data['id'] == 'MAX_RECOMMENDED_AGE':
-                    edad_maxima_libro = data['value_name']
+                # Variables locales
+                autor = ''
+                material_libro = ''
+                genero_libro = ''
+                isbn_libro = ''
+                idioma_libro = ''
+                edad_maxima_libro = ''
+                garantia_libro = ''
 
-            # Extraer dato de terms para garantia
-            for data_temrs in json_item['sale_terms']:
-                if data_temrs['id'] == 'WARRANTY_TYPE':
-                    garantia_libro = data_temrs['value_name']
+                # Extraer datos de atributo
+                for data in json_item['attributes']:
+                    if data['id'] == 'AUTHOR':
+                        autor = data['value_name']
+                    if data['id'] == 'BOOK_COVER_MATERIAL':
+                        material_libro = data['value_name']
+                    if data['id'] == 'BOOK_GENRE':
+                        genero_libro = data['value_name']
+                    if data['id'] == 'GTIN':
+                        isbn_libro = data['value_name']
+                    if data['id'] == 'LANGUAGE':
+                        idioma_libro = data['value_name']
+                    if data['id'] == 'MAX_RECOMMENDED_AGE':
+                        edad_maxima_libro = data['value_name']
 
-            # Llenado de objeto
-            obj={}
+                # Extraer dato de terms para garantia
+                for data_temrs in json_item['sale_terms']:
+                    if data_temrs['id'] == 'WARRANTY_TYPE':
+                        garantia_libro = data_temrs['value_name']
 
-            # Vista tree
-            obj['id_items'] = json_item['id']
-            obj['title'] = json_item['title']
-            obj['price'] = json_item['price']
-            obj['inventory_id'] = inventory
-            obj['currency_id'] = json_item['currency_id']
-            obj['initial_quantity'] = json_item['initial_quantity']
-            obj['available_quantity'] = json_item['available_quantity']
-            obj['sold_quantity'] = json_item['sold_quantity']
-            obj['logistic_type'] = json_item['shipping']['logistic_type']
 
-            # Vista Form
+                # Llenado de objeto
+                obj={}
 
-            obj['category_id']=json_item['category_id']
-            obj['base_price']=json_item['base_price']
-            obj['condition']=json_item['condition']
-            obj['warranty']=garantia_libro
-            obj['permalink']=json_item['permalink']
-            obj['pictures']=self.getImage(json_item['pictures'][0]['url'])
-            obj['geolocation']= link_ubicacion
-            obj['author']= autor
-            obj['book_cover']=material_libro
-            obj['book_genre']=genero_libro
-            obj['isbn']=isbn_libro
-            obj['language']=idioma_libro
-            obj['max_recommended_age']=edad_maxima_libro
-            #obj['tags'] = json_itm['']
+                # Vista tree
+                obj['id_items'] = json_item['id']
+                obj['title'] = json_item['title']
+                obj['price'] = json_item['price']
+                obj['inventory_id'] = inventory
+                obj['currency_id'] = json_item['currency_id']
+                obj['initial_quantity'] = json_item['initial_quantity']
+                obj['available_quantity'] = json_item['available_quantity']
+                obj['sold_quantity'] = json_item['sold_quantity']
+                obj['logistic_type'] = json_item['shipping']['logistic_type']
 
-            # Creación del objeto
-            self.env["meli.items"].create(obj)
+                # Vista Form
+                obj['category_id']=json_item['category_id']
+                obj['base_price']=json_item['base_price']
+                obj['condition']=json_item['condition']
+                obj['warranty']=garantia_libro
+                obj['permalink']=json_item['permalink']
+                obj['pictures']=self.getImage(json_item['pictures'][0]['url'])
+                obj['geolocation']= link_ubicacion
+                obj['author']= autor
+                obj['book_cover']=material_libro
+                obj['book_genre']=genero_libro
+                obj['isbn']=isbn_libro
+                obj['language']=idioma_libro
+                obj['max_recommended_age']=edad_maxima_libro
+                #obj['tags'] = json_item['tags']
+
+                # Creacion del objeto
+                self.env["meli.items"].create(obj)
+                print("Creando el objeto")
 
         
         pass
