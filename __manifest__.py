@@ -18,6 +18,7 @@
         'views/meli_connector.xml',
         'views/meli_orders.xml',
         'views/meli_shipments.xml',
+        'views/meli_items.xml',
         'views/sale_order.xml',
         'wizards/order_wizard.xml',
         'wizards/wizard.xml',

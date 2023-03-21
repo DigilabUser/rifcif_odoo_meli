@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista Tree -->
+    <record model="ir.ui.view" id="meli_items_tree_view_id">
+        <field name="name">meli_items_tree_view</field>
+        <field name="model">meli.items</field>
+        <field name="arch" type="xml">
+            <tree string="MercadoLibre Ítems">
+                <field name="id_items"></field>
+				<field name="title"></field>
+				<field name="price"></field>
+                <field name="inventory_id"></field>
+				<field name="currency_id"></field>
+                <field name="initial_quantity"></field>
+				<field name="available_quantity"></field>
+                <field name="sold_quantity"></field>
+				<field name="logistic_type"></field>                
+            </tree>
+        </field>
+    </record>
+
+</odoo>
