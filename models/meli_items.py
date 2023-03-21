@@ -18,3 +18,6 @@ class MercadolibreItems(models.Model):
     _rec_name="id_items"
 
     id_items = fields.Char('id items')
+
+    def create_items_from_meli_items(self):
+        pass
