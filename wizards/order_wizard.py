@@ -105,7 +105,7 @@ class MLOrderWizard(models.TransientModel):
                     obj["pack_id"]=order["pack_id"]
                     obj["coupon_amount"]=order["coupon"]["amount"]
                     obj["coupon_id"]=order["coupon"]["id"]
-                    obj["shipping_cost"]=order["shipping_cost"]
+                    obj["shipping_cost"]=(int(order["paid_amount"]) - int(order["total_amount"]))/(1.19)
                     obj["date_created"]=datetime(int(order["date_created"][0:4]),int(order["date_created"][5:7]),int(order["date_created"][8:10]),int(order["date_created"][11:13]),int(order["date_created"][14:16]),int(order["date_created"][17:19]))+timedelta(hours=5)
                     #obj["application_id"]=order["application_id"]
                     obj["pickup_id"]=order["pickup_id"]
