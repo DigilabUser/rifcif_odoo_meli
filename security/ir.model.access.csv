@@ -10,3 +10,4 @@ access_meli_items_admin,access.meli.items.admin,model_meli_items,,1,1,1,1
 access_meli_sales_admin_wizard,access.meli.sales.admin.wizard,model_meli_sales_wizard,,1,1,1,1
 access_meli_order_admin_wizard,access.meli.order.admin.wizard,model_meli_order_wizard,,1,1,1,1
 access_meli_multi_ticket_wizard,access.meli.multi.ticket.wizard,model_meli_multi_ticket_wizard,,1,1,1,1
+access_meli_tags_admin,access.meli.tags.admin,model_meli_tags,,1,1,1,1

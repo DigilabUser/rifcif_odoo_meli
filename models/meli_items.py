@@ -56,8 +56,7 @@ class MercadolibreItems(models.Model):
     language = fields.Char('Idioma')
     max_recommended_age = fields.Char('Edad maxima recomendada')
 
-    tag_ids = fields.Many2many('meli.tags', string='Etiquetas')    
-
+    tag_ids = fields.Many2many('meli.tags', string='Etiquetas')
     
     def get_data_from_api(self, uri, header):
         """
@@ -142,6 +141,22 @@ class MercadolibreItems(models.Model):
                     if data_temrs['id'] == 'WARRANTY_TYPE':
                         garantia_libro = data_temrs['value_name']
 
+                tags_ids = []
+
+                # Recorriendo tags
+                for data_tags in json_item['tags']:
+                    # Buscando em meli.tags si existe el nombre
+                    bs_tag = self.env["meli.tags"].search([('name','=',data_tags)])                    
+                    # Valido si no existe
+                    if len(bs_tag) == 0:
+                        # Creo un tags si no encuentro
+                        tag_respuesta = self.env["meli.tags"].create({"name": data_tags})
+                        # Guardando el id del tag
+                        bs_tag = tag_respuesta
+                    #Guardando en mi lista de tags
+                    tags_ids.append(bs_tag.id)
+
+
 
                 # Llenado de objeto
                 obj={}
@@ -171,9 +186,8 @@ class MercadolibreItems(models.Model):
                 obj['isbn']=isbn_libro
                 obj['language']=idioma_libro
                 obj['max_recommended_age']=edad_maxima_libro
-                #obj['tag_ids'] = 
+                obj['tag_ids'] = tags_ids
 
                 # Creacion del objeto
                 self.env["meli.items"].create(obj)
                 print("Creando el objeto")
-        pass
