@@ -61,7 +61,7 @@
                             <field name="currency_id"></field>                                                             
                             <field name="logistic_type" decoration-success="logistic_type == 'not full'"></field>
                             <field name="base_price"></field>
-                            <field name="tag_ids" widget="many2many_tags"></field>
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color_numb', 'no_create_edit': True}"></field>
                             <field name="permalink" widget="url"></field>
                             <field name="book_cover"></field>
                             <field name="max_recommended_age"></field>

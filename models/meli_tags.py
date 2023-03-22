@@ -17,3 +17,4 @@ class MercadolibreTag(models.Model):
     _name = 'meli.tags'
     
     name = fields.Char('Nombre')
+    color_numb = fields.Integer('Numero color')
