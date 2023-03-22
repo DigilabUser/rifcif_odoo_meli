@@ -150,7 +150,7 @@ class MercadolibreItems(models.Model):
                     # Valido si no existe
                     if len(bs_tag) == 0:
                         # Creo un tags si no encuentro
-                        tag_respuesta = self.env["meli.tags"].create({"name": data_tags, "color_numb": 10})
+                        tag_respuesta = self.env["meli.tags"].create({"name": data_tags})
                         # Guardando el id del tag
                         bs_tag = tag_respuesta
                     #Guardando en mi lista de tags
