@@ -87,27 +87,29 @@ class MLOrderWizard(models.TransientModel):
             if len(data)!= 0:
 
                 for order in data:
-                     #Consumo de RUT para usuario
+                    #Consumo de RUT para usuario
                     url_rut = RUT_URI.format(order["id"])
                     response_rut = self.get_data_from_api(url_rut, header)
                     ruc = response_rut['billing_info']['doc_number']
 
-                    
-                    dato_ruc = ruc[:8]
                     mostrar_ruc = "" 
-                    
+                    dato_ruc = ''
+
+                    for n in ruc.lower():
+                        if(n != 'k'):
+                            dato_ruc += n
+        
                     # print('-------------------------------')
                     # print(order["id"])
-                    # print(dato_ruc)
-                    # print(int(dato_ruc))
+                    # print('dato ruc:' + ruc)
+                    # print('dato ruc sin k:' + dato_ruc)
                     # print('-------------------------------')
 
                     if(int(dato_ruc) < 60000000):
                         mostrar_ruc = "boleta"
                     else:
                         mostrar_ruc = "factura"
-                    
-                    # print(response)
+
 
                     #print(order)
                     obj={}
