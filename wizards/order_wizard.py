@@ -93,22 +93,12 @@ class MLOrderWizard(models.TransientModel):
                     ruc = response_rut['billing_info']['doc_number']
 
                     mostrar_ruc = "" 
-                    dato_ruc = ''
+                    dato = ruc[:-1]
 
-                    for n in ruc.lower():
-                        if(n != 'k'):
-                            dato_ruc += n
-        
-                    # print('-------------------------------')
-                    # print(order["id"])
-                    # print('dato ruc:' + ruc)
-                    # print('dato ruc sin k:' + dato_ruc)
-                    # print('-------------------------------')
-
-                    if(int(dato_ruc) < 60000000):
-                        mostrar_ruc = "boleta"
-                    else:
+                    if(len(dato) >= 8 and int(dato[0]) >= 6):
                         mostrar_ruc = "factura"
+                    else:
+                        mostrar_ruc = "boleta"
 
 
                     #print(order)
@@ -143,7 +133,8 @@ class MLOrderWizard(models.TransientModel):
                     obj["total_amount"]=order["total_amount"]
                     obj["paid_amount"]=order["paid_amount"]
                     obj["status"]=order["status"]    
-                    obj["type_doc"]=  mostrar_ruc             
+                    obj["type_doc"]=  mostrar_ruc   
+                    obj["rut_user"] = ruc
                     #print(obj)
 
                     order_exist= self.env['meli.order'].search([("ml_order_id","=",obj["ml_order_id"])])

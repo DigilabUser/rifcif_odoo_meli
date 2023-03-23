@@ -79,7 +79,9 @@ class MercadolibreOrders(models.Model):
     shipping_status = fields.Char('Estado de envío')
     sale_order_id = fields.Many2one('sale.order', string='Orden de Venta')
     delivery_address = fields.Char('Dirección de entrega')
+
     type_doc = fields.Char('Tipo de documento')
+    rut_user = fields.Char('Rut')
 
 
     def get_data_from_api(self, uri, header):
