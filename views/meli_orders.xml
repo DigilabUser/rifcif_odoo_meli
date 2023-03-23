@@ -81,6 +81,7 @@
                                 <field name="comments"></field>
                                 <field name="status"></field>  
                                 <field name="sale_order_id"></field>
+                                <field name="type_doc"></field>
 
                             </group>
                             <group>
@@ -106,7 +107,9 @@
                                         <field name="quantity"></field>
                                         <field name="unit_price"></field>
                                         <!-- <field name="full_unit_price"></field> -->
-                                        <field name="sale_fee"></field>
+                                        <!-- <field name="sale_fee"></field> -->
+                                        <field name="paid_amount"></field>
+                                        <field name="shipping_cost"></field>
                                         <field name="currency_id"></field>
                                     </tree>
                                 </field>

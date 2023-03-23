@@ -186,6 +186,9 @@ class MLOrderWizard(models.TransientModel):
                             #Garantia
                             obj_item['warranty'] = json_item['warranty']
                             #Aca Crea
+                            obj_item["shipping_cost"]=(int(order["paid_amount"]) - int(order["total_amount"]))/(1.19)
+                            obj_item["paid_amount"]=order["paid_amount"]
+
                             self.env["meli.order.items"].sudo().create(obj_item)
                         for payment in order["payments"]:
                             obj_payment={}
