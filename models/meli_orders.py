@@ -169,7 +169,7 @@ class MercadolibreOrders(models.Model):
                         'order_id': sale_order.id,
                         'product_id': product_id.id,
                         'product_uom_qty': line['quantity'],
-                        'price_unit': line['unit_price'],
+                        'price_unit': int(line['unit_price'])*(1.19),
                         'name': line['title'],
                         'display_type': False,
                     }

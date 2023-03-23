@@ -104,7 +104,7 @@
                                         <field name="title"></field>
                                         <field name="quantity"></field>
                                         <field name="unit_price"></field>
-                                        <field name="full_unit_price"></field>
+                                        <!-- <field name="full_unit_price"></field> -->
                                         <field name="sale_fee"></field>
                                         <field name="currency_id"></field>
                                     </tree>
