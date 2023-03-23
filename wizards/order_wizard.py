@@ -23,6 +23,9 @@ GET_ORDER = ORDERS_URI + '/search?seller={}&order.date_created.from={}&order.dat
 ALBERT_ID='422252521'
 PRINT_TICKET_URI = API_URI + '/shipment_labels?shipment_ids={}&response_type=pdf'
 
+#Buscamos RUT
+RUT_URI = ORDERS_URI + '/{}/billing_info'
+
 class MLOrderWizard(models.TransientModel):
     _name = 'meli.order.wizard'
 
@@ -82,7 +85,30 @@ class MLOrderWizard(models.TransientModel):
             #     raise ValidationError(json_orders["message"])
             data = json_orders["results"]
             if len(data)!= 0:
+
                 for order in data:
+                     #Consumo de RUT para usuario
+                    url_rut = RUT_URI.format(order["id"])
+                    response_rut = self.get_data_from_api(url_rut, header)
+                    ruc = response_rut['billing_info']['doc_number']
+
+                    
+                    dato_ruc = ruc[:8]
+                    mostrar_ruc = "" 
+                    
+                    # print('-------------------------------')
+                    # print(order["id"])
+                    # print(dato_ruc)
+                    # print(int(dato_ruc))
+                    # print('-------------------------------')
+
+                    if(int(dato_ruc) < 60000000):
+                        mostrar_ruc = "boleta"
+                    else:
+                        mostrar_ruc = "factura"
+                    
+                    # print(response)
+
                     #print(order)
                     obj={}
                     obj["ml_order_id"] = order["id"]
@@ -114,7 +140,8 @@ class MLOrderWizard(models.TransientModel):
                     obj["buyer_id"]=order["buyer"]["id"]
                     obj["total_amount"]=order["total_amount"]
                     obj["paid_amount"]=order["paid_amount"]
-                    obj["status"]=order["status"]                   
+                    obj["status"]=order["status"]    
+                    obj["type_doc"]=  mostrar_ruc             
                     #print(obj)
 
                     order_exist= self.env['meli.order'].search([("ml_order_id","=",obj["ml_order_id"])])
