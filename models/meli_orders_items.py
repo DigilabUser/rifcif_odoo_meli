@@ -51,3 +51,6 @@ class MercadolibreOrdersItems(models.Model):
     publication_year = fields.Char('Año de publicación')
     #Garantia
     warranty = fields.Char('Garantia') 
+
+    shipping_cost = fields.Float('Costo de envio')
+    paid_amount = fields.Float('Monto de pago')

@@ -80,6 +80,9 @@ class MercadolibreOrders(models.Model):
     sale_order_id = fields.Many2one('sale.order', string='Orden de Venta')
     delivery_address = fields.Char('Dirección de entrega')
 
+    type_doc = fields.Char('Tipo de documento')
+    rut_user = fields.Char('Rut')
+
 
     def get_data_from_api(self, uri, header):
         """
@@ -106,7 +109,8 @@ class MercadolibreOrders(models.Model):
         #Me traigo todas las MELI order que sean not full
         meli_order_ids = self.env['meli.order'].search([('logistic_type','=','not full'),('sale_order_id','=',False)])
         #Las recorro
-        for meli_order in meli_order_ids:            
+        for meli_order in meli_order_ids: 
+
             order_id= meli_order["ml_order_id"]
             url_billing= BILLING_URI.format(order_id)
             json_billing= self.get_data_from_api(url_billing, header)    
@@ -159,24 +163,76 @@ class MercadolibreOrders(models.Model):
             obj['order_ml']=meli_order['ml_order_id']
             obj['date_order']=meli_order['date_created']
             obj['amount_total']=meli_order['total_amount']  
-            #Creo la orden           
-            sale_order = self.env["sale.order"].create(obj)
-            #Creo las lineas de pedido
-            for line in meli_order["item_ids"]:
-                product_id = self.env['product.template'].search([('isbn','=', line['isbn'])])
-                if product_id:
-                    line_vals = {
-                        'order_id': sale_order.id,
-                        'product_id': product_id.id,
-                        'product_uom_qty': line['quantity'],
-                        'price_unit': line['unit_price'],
-                        'name': line['title'],
-                        'display_type': False,
-                    }
-                    print(line_vals)
-                    self.env['sale.order.line'].create(line_vals)
-            #Busco la orden creada
-            order= self.env['sale.order'].search([('id','=',sale_order.id)])
-            meli_order.sudo().write({
-                'sale_order_id':order.id
-            })
+
+            print(meli_order["pack_id"])
+
+            #Creo la orden
+            if(meli_order["pack_id"] == False):
+                print("creando orden")
+                sale_order = self.env["sale.order"].create(obj)
+
+                #Creo las lineas de pedido
+                for line in meli_order["item_ids"]:
+                    product_id = self.env['product.template'].search([('isbn','=', line['isbn'])])
+                    if product_id:
+                        line_vals = {
+                            'order_id': sale_order.id,
+                            'product_id': product_id.id,
+                            'product_uom_qty': line['quantity'],
+                            'price_unit': int(line['unit_price'])*(1.19),
+                            'name': line['title'],
+                            'display_type': False,
+                            }
+                        print(line_vals)
+                        self.env['sale.order.line'].create(line_vals)
+                #Busco la orden creada
+                order= self.env['sale.order'].search([('id','=',sale_order.id)])
+                meli_order.sudo().write({
+                    'sale_order_id':order.id
+                })
+            else:
+                # Trae los meli.order que tengan el mismo pack
+                #Aqui tenemos mas de una orden => meli_order_pack
+                meli_order_pack = self.env['meli.order'].search([("pack_id", "=", meli_order["pack_id"])])
+                ml_order_id_pack = ""
+                ml_order_date_pack=""
+                ml_amount_pack=0
+                for order_pack in meli_order_pack:
+                    #|21312312213|12321312321|
+                    ml_order_id_pack += "|"+ str(order_pack['ml_order_id']) + "|"
+                    ml_order_date_pack = order_pack["date_created"]
+                    ml_amount_pack +=order_pack["total_amount"]
+                    
+                obj={}
+                obj['partner_id']=partner_exist['id']
+                obj['order_ml']=ml_order_id_pack
+                obj['date_order']=ml_order_date_pack
+                obj['amount_total']=ml_amount_pack  
+
+                sale_order = self.env["sale.order"].create(obj)
+                # Aca los recorro
+                for order_pack in meli_order_pack:
+                    #Creo las lineas de pedido
+                    for line in order_pack["item_ids"]:
+                        product_id = self.env['product.template'].search([('isbn','=', line['isbn'])])
+                        if product_id:
+                            line_vals = {
+                                'order_id': sale_order.id,
+                                'product_id': product_id.id,
+                                'product_uom_qty': line['quantity'],
+                                'price_unit': int(line['unit_price'])*(1.19),
+                                'name': line['title'],
+                                'display_type': False,
+                                }
+                            print(line_vals)
+                            self.env['sale.order.line'].create(line_vals)  
+                    #Busco la orden creada
+                    order= self.env['sale.order'].search([('id','=',sale_order.id)])
+                    order_pack.sudo().write({
+                        'sale_order_id':order.id
+                    })                                              
+                    print(order_pack['item_ids'])
+
+
+
+            
