@@ -159,7 +159,7 @@ class MercadolibreShipments(models.Model):
             url_shipments = SHIPMENTS_URI.format(order["ml_order_id"])
             json_shipments = self.get_data_from_api(url_shipments,header)
         #    print("\n\n{}\n\n".format(json_shipments))
-            if json_shipments["status"]!=404:
+            if str(json_shipments["status"])[0]!="4":
                 print("\n\n---------------\n\n")
                 print(json_shipments)
                 obj={}
