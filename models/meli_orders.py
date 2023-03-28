@@ -118,7 +118,7 @@ class MercadolibreOrders(models.Model):
             #Creo mis Lineas de factura.
             for item in sale_id["order_line"]:
                 line_vals = {
-                    'move_id': order_id,
+                    'move_id': order_id.id,
                     'product_id': item.product_id.id,
                     'product_uom_qty': item.product_uom_qty,
                     'price_unit': item.price_unit,
