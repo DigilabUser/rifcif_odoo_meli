@@ -132,8 +132,12 @@ class MercadolibreOrders(models.Model):
                     'price_subtotal':item.price_subtotal,
                     'display_type': False,
                     #'account_id':account_id.id,
+                    'is_gd_line':False, 
+                    'is_gr_line':False, 
+                    'is_retention':False,
                     'exclude_from_invoice_tab':False,
                     'currency_id':45,
+                    'journal_id':1,
                     }
                 _logger.info("---------___%s",line_vals)
                 self.env['account.move.line'].create(line_vals)                
