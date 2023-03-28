@@ -111,7 +111,7 @@ class MercadolibreOrders(models.Model):
             obj["l10n_latam_document_number"]= document_type_code_id
 
             move_id=self.env["account.move"].sudo().create(obj)
-            print(sale_id)
+            _logger.info(sale_id)
             #Creo mis Lineas de factura.
             for item in sale_id[0]["orden_lines"]:
                 line_vals = {
