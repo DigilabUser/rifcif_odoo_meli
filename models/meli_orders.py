@@ -96,6 +96,41 @@ class MercadolibreOrders(models.Model):
         json_response = json.loads(response.text)
         return json_response 
 
+    def create_invoice_from_ml_orders(self, meli_order_id):
+        if meli_order_id["sale_order_id"]:
+            sale_id = self.env["sale.order"].search([("id", "=", meli_order_id["sale_order_id"]["id"])])
+            document_class_type = "(96) Factura Electrónica: 33" if meli_order_id["type_doc"]=="Factura" else "(999) Boleta Electrónica: 39" 
+            document_class_type_id = self.env["account.journal.sii_document_class"].search([("name","=",document_class_type)])
+            document_type_code = "33" if meli_order_id["type_doc"]=="Factura" else "39" 
+            document_type_code_id = self.env["l10n_latam.document.type"].search([("code","=",document_type_code)])
+            #creo mi objeto para la factura
+            obj={}
+            obj["use_documents"]=True
+            obj["journal_document_class_id"]= document_class_type_id
+            obj["partner_id"]=meli_order_id["sale_order_id"]["partner_id"]["id"]
+            obj["l10n_latam_document_number"]= document_type_code_id
+
+            move_id=self.env["account.move"].sudo().create(obj)
+
+            #Creo mis Lineas de factura.
+            for item in meli_order_id["sale_order_id"]["orden_line"]:
+                line_vals = {
+                    'order_id': move_id.id,
+                    'product_id': item.product_id.id,
+                    'product_uom_qty': item.product_uom_qty,
+                    'price_unit': item.price_unit,
+                    'tax_ids':[1],
+                    'name': item.name,
+                    'price_subtotal':item.price_subtotal,
+                    'display_type': False
+                    }
+                print(line_vals)
+                self.env['account.move.line'].create(line_vals)                
+
+
+
+
+
     def create_sale_order_from_meli_order(self):
 
         #Obtener el token
@@ -117,7 +152,6 @@ class MercadolibreOrders(models.Model):
 
             number_doc = json_billing["billing_info"]["doc_number"]
 
-            partner_exist = self.env["res.partner"].search([('vat','=',number_doc)])
 
             # Variables locales
             data_name = ""
@@ -141,11 +175,9 @@ class MercadolibreOrders(models.Model):
 
             data_name = data_name + " " + data_lastname
             data_street =  data_stree_name + " " + data_stree_number
-            # print(data_name)
-            # print(data_las_name)
-            # print(data_ruc)
 
-            # #El cliente no existe
+            #Busco al cliente
+            partner_exist = self.env["res.partner"].search([('vat','=',number_doc)])
             if len(partner_exist)==0:
                  # Si el cliente no existe, lo creo
                 new_partner = self.env['res.partner'].sudo().create({
@@ -156,7 +188,6 @@ class MercadolibreOrders(models.Model):
                     'customer_rank':1
                 })
                 partner_exist = new_partner
-            # ---------
             # aca voy a crear mi orden de venta
             obj={}
             obj['partner_id']=partner_exist['id']
@@ -164,13 +195,10 @@ class MercadolibreOrders(models.Model):
             obj['date_order']=meli_order['date_created']
             obj['amount_total']=meli_order['total_amount']  
 
-            print(meli_order["pack_id"])
-
-            #Creo la orden
+            #Verifico si es una meli_orden en paquete
             if(meli_order["pack_id"] == False):
-                print("creando orden")
+                #Si no es paquete, creo la orden
                 sale_order = self.env["sale.order"].create(obj)
-
                 #Creo las lineas de pedido
                 for line in meli_order["item_ids"]:
                     product_id = self.env['product.template'].search([('isbn','=', line['isbn'])])
@@ -187,11 +215,12 @@ class MercadolibreOrders(models.Model):
                         self.env['sale.order.line'].create(line_vals)
                 #Busco la orden creada
                 order= self.env['sale.order'].search([('id','=',sale_order.id)])
+                #Actualizo el campo para la trazabilidad
                 meli_order.sudo().write({
                     'sale_order_id':order.id
                 })
             else:
-                # Trae los meli.order que tengan el mismo pack
+                # Si es paquete, trae los meli.order que tengan el mismo pack
                 #Aqui tenemos mas de una orden => meli_order_pack
                 meli_order_pack = self.env['meli.order'].search([("pack_id", "=", meli_order["pack_id"])])
                 ml_order_id_pack = ""
@@ -208,9 +237,9 @@ class MercadolibreOrders(models.Model):
                 obj['order_ml']=ml_order_id_pack
                 obj['date_order']=ml_order_date_pack
                 obj['amount_total']=ml_amount_pack  
-
+                #Creo la orden
                 sale_order = self.env["sale.order"].create(obj)
-                # Aca los recorro
+                # Recorro las meli_orders con el mismo pack_id para obtener sus items
                 for order_pack in meli_order_pack:
                     #Creo las lineas de pedido
                     for line in order_pack["item_ids"]:
@@ -228,10 +257,12 @@ class MercadolibreOrders(models.Model):
                             self.env['sale.order.line'].create(line_vals)  
                     #Busco la orden creada
                     order= self.env['sale.order'].search([('id','=',sale_order.id)])
+                    #Actualizo el campo para la trazabilidad
                     order_pack.sudo().write({
                         'sale_order_id':order.id
                     })                                              
                     print(order_pack['item_ids'])
+            self.create_invoice_from_ml_orders(meli_order)
 
 
 
