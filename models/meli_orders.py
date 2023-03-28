@@ -117,7 +117,8 @@ class MercadolibreOrders(models.Model):
             obj['company_id']=1,
             obj['currency_id']=45
             obj['amount_total']=meli_order_id["sale_order_id"]['amount_total']
-
+            _logger.info("---------%s",obj)
+            #Creo mi orden
             order_id=self.env["account.move"].sudo().create(obj)
             #Creo mis Lineas de factura.
             for item in sale_id["order_line"]:
@@ -130,7 +131,9 @@ class MercadolibreOrders(models.Model):
                     'name': item.name,
                     'price_subtotal':item.price_subtotal,
                     'display_type': False,
-                    'account_id':account_id.id
+                    #'account_id':account_id.id,
+                    'exclude_from_invoice_tab':False,
+                    'currency_id':45,
                     }
                 _logger.info("---------___%s",line_vals)
                 self.env['account.move.line'].create(line_vals)                
