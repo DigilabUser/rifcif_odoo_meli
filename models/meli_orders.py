@@ -127,7 +127,7 @@ class MercadolibreOrders(models.Model):
                     'display_type': False,
                     'account_id':account_id.id
                     }
-                print(line_vals)
+                _logger.info("---------___%s",line_vals)
                 self.env['account.move.line'].create(line_vals)                
 
 
