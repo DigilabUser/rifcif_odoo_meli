@@ -111,6 +111,7 @@ class MercadolibreOrders(models.Model):
             obj["journal_document_class_id"]= sii_class_type_id.id
             obj["partner_id"]=meli_order_id["sale_order_id"]["partner_id"]["id"]
             obj["l10n_latam_document_number"]= document_type_code_id.id
+            obj['journal_id']=1
 
             order_id=self.env["account.move"].sudo().create(obj)
             #Creo mis Lineas de factura.
