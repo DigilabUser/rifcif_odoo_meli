@@ -116,7 +116,9 @@ class MercadolibreOrders(models.Model):
             obj['invoice_origin']=meli_order_id["sale_order_id"]["name"]
             obj['company_id']=1,
             obj['currency_id']=45
-            obj['amount_total']=meli_order_id["sale_order_id"]['amount_total']
+            obj['amount_untaxed']=meli_order_id["sale_order_id"]['amount_total']
+            #obj['amount_total']=meli_order_id["sale_order_id"]['amount_total']
+
             _logger.info("---------%s",obj)
             #Creo mi orden
             order_id=self.env["account.move"].sudo().create(obj)
