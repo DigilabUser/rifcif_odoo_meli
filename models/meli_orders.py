@@ -105,6 +105,48 @@ class MercadolibreOrders(models.Model):
             document_type_code = "33" if meli_order_id["type_doc"]=="factura" else "39" 
             document_type_code_id = self.env["l10n_latam.document.type"].search([("code","=",document_type_code)])
             account_id = self.env['account.account'].search([('code','=','310115')])
+            #Creo las lineas 
+            move_lines = []
+            for item in sale_id["order_line"]:
+                # line_vals = {
+                #     'move_id': order_id.id,
+                #     'product_id': item.product_id.id,
+                #     'quantity': item.product_uom_qty,
+                #     'price_unit': item.price_unit,
+                #     'tax_ids':[1],
+                #     'name': item.name,
+                #     'price_subtotal':item.price_subtotal,
+                #     'display_type': False,
+                #     'account_id':account_id.id,
+                #     'is_gd_line':False, 
+                #     'is_gr_line':False, 
+                #     'is_retention':False,
+                #     'exclude_from_invoice_tab':False,
+                #     'currency_id':45,
+                #     'journal_id':1, 
+                #     }
+                # _logger.info("---------___%s",line_vals)
+                # self.env['account.move.line'].create(line_vals)               
+                move_lines.append( (0, 0, { 
+                            'date':meli_order_id["date_created"], 
+                            'journal_id':1,
+                            'company_id':1, 
+                            'company_currency_id':45,
+                            'partner_id':meli_order_id["sale_order_id"]["partner_id"]["id"],
+                            'product_id':item.product_id.id,
+                            'name':item.name,
+                            'quantity':item.product_uom_qty,
+                            'price_unit':item.price_unit, 
+                            #'price_total':lindet['price_total'],
+                            'price_subtotal':item.price_subtotal,
+                            'is_gd_line':False, 
+                            'is_gr_line':False, 
+                            'is_retention':False,
+                            'product_uom_id':1, 
+                            'currency_id':45, 
+                            'exclude_from_invoice_tab':False, 
+                            'tax_ids':[1]  
+                            }))             
             #creo mi objeto para la factura
             obj={}
             obj["use_documents"]=True
@@ -117,32 +159,14 @@ class MercadolibreOrders(models.Model):
             obj['company_id']=1,
             obj['currency_id']=45
             obj['amount_untaxed']=meli_order_id["sale_order_id"]['amount_total']
-            #obj['amount_total']=meli_order_id["sale_order_id"]['amount_total']
+            obj['invoice_line_ids']= move_lines
+            #|obj['amount_total']=meli_order_id["sale_order_id"]['amount_total']
 
             _logger.info("---------%s",obj)
             #Creo mi orden
             order_id=self.env["account.move"].sudo().create(obj)
             #Creo mis Lineas de factura.
-            for item in sale_id["order_line"]:
-                line_vals = {
-                    'move_id': order_id.id,
-                    'product_id': item.product_id.id,
-                    'quantity': item.product_uom_qty,
-                    'price_unit': item.price_unit,
-                    'tax_ids':[1],
-                    'name': item.name,
-                    'price_subtotal':item.price_subtotal,
-                    'display_type': False,
-                    'account_id':account_id.id,
-                    'is_gd_line':False, 
-                    'is_gr_line':False, 
-                    'is_retention':False,
-                    'exclude_from_invoice_tab':False,
-                    'currency_id':45,
-                    'journal_id':1, 
-                    }
-                _logger.info("---------___%s",line_vals)
-                self.env['account.move.line'].create(line_vals)                
+             
 
 
 
