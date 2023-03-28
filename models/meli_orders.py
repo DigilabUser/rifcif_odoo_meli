@@ -108,7 +108,7 @@ class MercadolibreOrders(models.Model):
             #creo mi objeto para la factura
             obj={}
             obj["use_documents"]=True
-            obj["journal_document_class_id"]= sii_class_type_id
+            obj["journal_document_class_id"]= sii_class_type_id.id
             obj["partner_id"]=meli_order_id["sale_order_id"]["partner_id"]["id"]
             obj["l10n_latam_document_number"]= document_type_code_id.id
 
