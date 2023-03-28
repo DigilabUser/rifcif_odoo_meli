@@ -101,11 +101,10 @@ class MercadolibreOrders(models.Model):
             sale_id = self.env["sale.order"].search([("id", "=", meli_order_id["sale_order_id"]["id"])])
             document_class_type = "Factura Electrónica" if meli_order_id["type_doc"]=="factura" else "Boleta Electrónica" 
             document_class_type_id = self.env["sii.document_class"].search([("name","=",document_class_type)])
-            _logger.info("=======%s",document_class_type_id)
             sii_class_type_id = self.env["account.journal.sii_document_class"].search([("sii_document_class_id","=",document_class_type_id.id)])
-            _logger.info("=======%s",sii_class_type_id)
             document_type_code = "33" if meli_order_id["type_doc"]=="factura" else "39" 
             document_type_code_id = self.env["l10n_latam.document.type"].search([("code","=",document_type_code)])
+            account_id = self.env['account.account'].search([('code','=','310115')])
             #creo mi objeto para la factura
             obj={}
             obj["use_documents"]=True
@@ -114,7 +113,6 @@ class MercadolibreOrders(models.Model):
             obj["l10n_latam_document_number"]= document_type_code_id.id
 
             order_id=self.env["account.move"].sudo().create(obj)
-            _logger.info(obj)
             #Creo mis Lineas de factura.
             for item in sale_id["order_line"]:
                 line_vals = {
@@ -125,7 +123,8 @@ class MercadolibreOrders(models.Model):
                     'tax_ids':[1],
                     'name': item.name,
                     'price_subtotal':item.price_subtotal,
-                    'display_type': False
+                    'display_type': False,
+                    'account_id':account_id.id
                     }
                 print(line_vals)
                 self.env['account.move.line'].create(line_vals)                
