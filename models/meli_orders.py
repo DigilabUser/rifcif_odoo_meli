@@ -112,6 +112,8 @@ class MercadolibreOrders(models.Model):
             obj["partner_id"]=meli_order_id["sale_order_id"]["partner_id"]["id"]
             obj["l10n_latam_document_number"]= document_type_code_id.id
             obj['journal_id']=1
+            obj['move_type']='out_invoice'
+            obj['invoice_origin']=meli_order_id["sale_order_id"]["name"]
 
             order_id=self.env["account.move"].sudo().create(obj)
             #Creo mis Lineas de factura.
