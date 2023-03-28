@@ -100,7 +100,7 @@ class MercadolibreOrders(models.Model):
         if meli_order_id["sale_order_id"]:
             sale_id = self.env["sale.order"].search([("id", "=", meli_order_id["sale_order_id"]["id"])])
             document_class_type = "Factura Electrónica" if meli_order_id["type_doc"]=="factura" else "Boleta Electrónica" 
-            document_class_type_id = self.env["sii_document_class"].search([("name","=",document_class_type)])
+            document_class_type_id = self.env["sii.document_class"].search([("name","=",document_class_type)])
             sii_class_type_id = self.env["account.journal_sii_document_class"].search([("sii_document_class_id","=",sii_class_type_id.id)])
             document_type_code = "33" if meli_order_id["type_doc"]=="factura" else "39" 
             document_type_code_id = self.env["l10n_latam.document.type"].search([("code","=",document_type_code)])
