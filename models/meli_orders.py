@@ -99,9 +99,9 @@ class MercadolibreOrders(models.Model):
     def create_invoice_from_ml_orders(self, meli_order_id):
         if meli_order_id["sale_order_id"]:
             sale_id = self.env["sale.order"].search([("id", "=", meli_order_id["sale_order_id"]["id"])])
-            document_class_type = "(96) Factura Electrónica: 33" if meli_order_id["type_doc"]=="Factura" else "(999) Boleta Electrónica: 39" 
+            document_class_type = "(96) Factura Electrónica: 33" if meli_order_id["type_doc"]=="factura" else "(999) Boleta Electrónica: 39" 
             document_class_type_id = self.env["account.journal.sii_document_class"].search([("name","=",document_class_type)])
-            document_type_code = "33" if meli_order_id["type_doc"]=="Factura" else "39" 
+            document_type_code = "33" if meli_order_id["type_doc"]=="factura" else "39" 
             document_type_code_id = self.env["l10n_latam.document.type"].search([("code","=",document_type_code)])
             #creo mi objeto para la factura
             obj={}
