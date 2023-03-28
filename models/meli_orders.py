@@ -113,9 +113,9 @@ class MercadolibreOrders(models.Model):
             move_id=self.env["account.move"].sudo().create(obj)
             _logger.info(sale_id)
             #Creo mis Lineas de factura.
-            for item in sale_id["order_line"]:
+            for item in sale_id["order_lines"]:
                 line_vals = {
-                    'order_id': move_id.id,
+                    'order_id': move_id,
                     'product_id': item.product_id.id,
                     'product_uom_qty': item.product_uom_qty,
                     'price_unit': item.price_unit,
