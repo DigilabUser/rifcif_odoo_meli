@@ -120,7 +120,7 @@ class MercadolibreOrders(models.Model):
                 line_vals = {
                     'move_id': order_id.id,
                     'product_id': item.product_id.id,
-                    'product_uom_qty': item.product_uom_qty,
+                    'quantity': item.product_uom_qty,
                     'price_unit': item.price_unit,
                     'tax_ids':[1],
                     'name': item.name,
