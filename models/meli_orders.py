@@ -153,13 +153,13 @@ class MercadolibreOrders(models.Model):
         meli_order_ids = self.env['meli.order'].search([('logistic_type','=','not full'),('sale_order_id','=',False)])
         #Las recorro
         for meli_order in meli_order_ids: 
-
+            
             order_id= meli_order["ml_order_id"]
             url_billing= BILLING_URI.format(order_id)
             json_billing= self.get_data_from_api(url_billing, header)    
 
             number_doc = json_billing["billing_info"]["doc_number"]
-
+            meli_order.write({'rut_user':number_doc})
 
             # Variables locales
             data_name = ""
