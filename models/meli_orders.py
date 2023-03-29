@@ -78,6 +78,7 @@ class MercadolibreOrders(models.Model):
     logistic_type = fields.Char('Tipo de logística')
     shipping_status = fields.Char('Estado de envío')
     sale_order_id = fields.Many2one('sale.order', string='Orden de Venta')
+    move_id = fields.Many2one('account.move', string='Factura/Boleta Electrónica')
     delivery_address = fields.Char('Dirección de entrega')
 
     type_doc = fields.Char('Tipo de documento')
@@ -152,7 +153,7 @@ class MercadolibreOrders(models.Model):
             obj["use_documents"]=True
             obj["journal_document_class_id"]= sii_class_type_id.id
             obj["partner_id"]=meli_order_id["sale_order_id"]["partner_id"]["id"]
-            obj["l10n_latam_document_number"]= document_type_code_id.id
+            obj["l10n_latam_document_type_id"]= document_type_code_id.id
             obj['journal_id']=1
             obj['move_type']='out_invoice'
             obj['invoice_origin']=meli_order_id["sale_order_id"]["name"]

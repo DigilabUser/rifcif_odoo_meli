@@ -20,6 +20,7 @@
         'views/meli_shipments.xml',
         'views/meli_items.xml',
         'views/sale_order.xml',
+        'views/account_move.xml',
         'wizards/order_wizard.xml',
         'wizards/wizard.xml',
         #'views/settings_inherit.xml'

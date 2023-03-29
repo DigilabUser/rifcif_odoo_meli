@@ -42,6 +42,7 @@
                     <field name="logistic_type" decoration-success="logistic_type == 'not full' and shipping_status == 'ready_to_ship'" decoration-warning="logistic_type == 'not full' and shipping_status != 'ready_to_ship'"></field>
                     <field name="shipping_status" decoration-success="shipping_status == 'ready_to_ship' and logistic_type == 'not full'" decoration-warning="shipping_status == 'ready_to_ship' and logistic_type != 'not full'"></field>
                     <field name="sale_order_id"></field>
+                    <field name="move_id"></field>
                     <field name="type_doc"></field>
                     <field name="pack_id"></field>
 	        	</tree>
@@ -83,6 +84,7 @@
                                 <field name="comments"></field>
                                 <field name="status"></field>  
                                 <field name="sale_order_id"></field>
+                                <field name="move_id"></field>
                                 <field name="type_doc"></field>
 
                             </group>

@@ -10,3 +10,4 @@ from . import meli_orders_payments
 from . import meli_shipments
 from . import meli_items
 from . import meli_tags
+from . import account_move
