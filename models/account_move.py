@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
 
-_logger = logging.getLogger(__name__)
 
 
 class AccountMoveInherit(models.Model):
