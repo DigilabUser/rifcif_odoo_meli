@@ -208,7 +208,9 @@ class MercadolibreOrders(models.Model):
                     'name': data_name,
                     #'lastname': data_las_name,
                     'vat': data_ruc,
+                    'document_number': data_ruc,
                     'street': data_street,
+                    'l10n_cl_sii_taxpayer_type':1,
                     'customer_rank':1
                 })
                 partner_exist = new_partner
