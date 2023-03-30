@@ -142,7 +142,7 @@ class MercadolibreOrders(models.Model):
             obj['amount_untaxed']=meli_order_id["sale_order_id"]['amount_total']
             obj['meli_order_id']=meli_order_id["id"]
             obj['invoice_line_ids']= move_lines #Coloco las lineas de factura aca
-
+            print(obj)
             #Creo mi orden
             order_id=self.env["account.move"].sudo().create(obj)
             meli_order_id.write({'move_id':order_id.id})
