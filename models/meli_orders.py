@@ -206,7 +206,7 @@ class MercadolibreOrders(models.Model):
                 obj["vat"]=data_ruc
                 obj["document_number"]=data_ruc
                 obj["street"]=data_street
-                obj["l10n_cl_sii_taxpayer_type"]=1 if self.type_doc=='factura' else 3
+                obj["l10n_cl_sii_taxpayer_type"]='1' if self.type_doc=='factura' else '3'
                 obj["customer_rank"]=1
                 _logger.info("====================%s",obj)
                 new_partner = self.env['res.partner'].sudo().create(obj)
