@@ -200,16 +200,16 @@ class MercadolibreOrders(models.Model):
             #Busco al cliente
             partner_exist = self.env["res.partner"].search([('vat','=',number_doc)])
             if len(partner_exist)==0:
-                 # Si el cliente no existe, lo creo
-                new_partner = self.env['res.partner'].sudo().create({
-                    'name': data_name,
-                    #'lastname': data_las_name,
-                    'vat': data_ruc,
-                    'document_number': data_ruc,
-                    'street': data_street,
-                    'l10n_cl_sii_taxpayer_type':1 if self.type_doc=='factura' else 3,
-                    'customer_rank':1
-                })
+                # Si el cliente no existe, lo creo
+                obj={}
+                obj["name"]=data_name
+                obj["vat"]=data_ruc
+                obj["document_number"]=data_ruc
+                obj["street"]=data_street
+                obj["l10n_cl_sii_taxpayer_type"]=1 if self.type_doc=='factura' else 3
+                obj["customer_rank"]=1
+                _logger.info("====================%s",obj)
+                new_partner = self.env['res.partner'].sudo().create(obj)
                 partner_exist = new_partner
             # aca voy a crear mi orden de venta
             obj={}
