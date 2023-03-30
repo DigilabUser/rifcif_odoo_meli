@@ -84,6 +84,20 @@ class MercadolibreOrders(models.Model):
     type_doc = fields.Char('Tipo de documento')
     rut_user = fields.Char('Rut')
 
+    def formatear_rut(rut):
+        """
+        Esta función toma un RUT chileno como una cadena y devuelve el RUT
+        formateado con puntos y guión. Si el RUT es inválido, devuelve None.
+        """
+        rut = rut.replace(".", "").replace("-", "").strip().upper()
+        if not rut.isdigit() or len(rut) < 7:
+            return None
+        dv = rut[-1]
+        cuerpo = rut[:-1]
+        cuerpo_reversed = cuerpo[::-1]
+        cuerpo_con_puntos = ".".join([cuerpo_reversed[i:i+3] for i in range(0, len(cuerpo_reversed), 3)])
+        return f"{cuerpo_con_puntos[::-1]}-{dv}"
+
 
     def get_data_from_api(self, uri, header):
         """
@@ -203,7 +217,7 @@ class MercadolibreOrders(models.Model):
                 # Si el cliente no existe, lo creo
                 obj={}
                 obj["name"]=data_name
-                obj["vat"]=data_ruc
+                obj["vat"]=self.formatear_rut(data_ruc)
                 obj["document_number"]=data_ruc
                 obj["street"]=data_street
                 obj["l10n_cl_sii_taxpayer_type"]='1' if meli_order['type_doc']=='factura' else '3'
