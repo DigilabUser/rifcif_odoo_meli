@@ -105,8 +105,7 @@ class MercadolibreOrders(models.Model):
             sii_class_type_id = self.env["account.journal.sii_document_class"].search([("sii_document_class_id","=",document_class_type_id.id)])
             document_type_code = "33" if meli_order_id["type_doc"]=="factura" else "39" 
             document_type_code_id = self.env["l10n_latam.document.type"].search([("code","=",document_type_code)])
-            account_id = self.env['account.account'].search([('code','=','310115')])
-            #Creo las lineas 
+            #Creo las lineas de factura
             move_lines = []
             for item in sale_id["order_line"]:             
                 move_lines.append( (0, 0, { 
@@ -132,6 +131,7 @@ class MercadolibreOrders(models.Model):
             obj={}
             obj["use_documents"]=True
             obj["journal_document_class_id"]= sii_class_type_id.id
+            obj["document_class_id"] = document_class_type_id
             obj["partner_id"]=meli_order_id["sale_order_id"]["partner_id"]["id"]
             obj["l10n_latam_document_type_id"]= document_type_code_id.id
             obj['journal_id']=1
@@ -141,14 +141,11 @@ class MercadolibreOrders(models.Model):
             obj['currency_id']=45
             obj['amount_untaxed']=meli_order_id["sale_order_id"]['amount_total']
             obj['meli_order_id']=meli_order_id["id"]
-            obj['invoice_line_ids']= move_lines
-            #|obj['amount_total']=meli_order_id["sale_order_id"]['amount_total']
+            obj['invoice_line_ids']= move_lines #Coloco las lineas de factura aca
 
-            _logger.info("---------%s",obj)
             #Creo mi orden
             order_id=self.env["account.move"].sudo().create(obj)
             meli_order_id.write({'move_id':order_id.id})
-            #Creo mis Lineas de factura.
              
 
 
@@ -210,7 +207,7 @@ class MercadolibreOrders(models.Model):
                     'vat': data_ruc,
                     'document_number': data_ruc,
                     'street': data_street,
-                    'l10n_cl_sii_taxpayer_type':1,
+                    'l10n_cl_sii_taxpayer_type':2 if self.type_doc=='factura' else 3,
                     'customer_rank':1
                 })
                 partner_exist = new_partner
