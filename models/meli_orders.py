@@ -207,7 +207,7 @@ class MercadolibreOrders(models.Model):
                     'vat': data_ruc,
                     'document_number': data_ruc,
                     'street': data_street,
-                    'l10n_cl_sii_taxpayer_type':2 if self.type_doc=='factura' else 3,
+                    'l10n_cl_sii_taxpayer_type':1 if self.type_doc=='factura' else 3,
                     'customer_rank':1
                 })
                 partner_exist = new_partner
