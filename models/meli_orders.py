@@ -235,7 +235,6 @@ class MercadolibreOrders(models.Model):
                     product_id = self.env['product.template'].search([('isbn','=', line['isbn'])])
                     if product_id:
                         order_lines.append( (0, 0, { 
-                            'order_id': sale_order.id,
                             'product_id': product_id.id,
                             'product_uom_qty': line['quantity'],
                             'price_unit': int(line['unit_price'])*(1.19),
@@ -278,7 +277,6 @@ class MercadolibreOrders(models.Model):
                         product_id = self.env['product.template'].search([('isbn','=', line['isbn'])])
                         if product_id:
                             order_lines.append( (0, 0, { 
-                                'order_id': sale_order.id,
                                 'product_id': product_id.id,
                                 'product_uom_qty': line['quantity'],
                                 'price_unit': int(line['unit_price'])*(1.19),
