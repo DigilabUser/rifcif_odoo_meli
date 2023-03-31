@@ -232,3 +232,6 @@ class MLOrderWizard(models.TransientModel):
             else: 
                 there_is_orders = False
         print("Se crearon {} registros".format(counter))
+
+    def syncAll(self):
+        pass
