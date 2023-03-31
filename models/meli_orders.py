@@ -216,7 +216,7 @@ class MercadolibreOrders(models.Model):
                 # Si el cliente no existe, lo creo
                 obj={}
                 obj["name"]=data_name
-                obj["vat"]=self.formatear_rut(data_ruc)
+                #obj["vat"]=self.formatear_rut(data_ruc)
                 obj["document_number"]=self.formatear_rut(data_ruc)
                 obj["street"]=data_street
                 obj["l10n_cl_sii_taxpayer_type"]='1' if meli_order['type_doc']=='factura' else '3'
