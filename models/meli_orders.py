@@ -211,7 +211,7 @@ class MercadolibreOrders(models.Model):
             data_street =  data_stree_name + " " + data_stree_number
 
             #Busco al cliente
-            partner_exist = self.env["res.partner"].search([('document_number','=',self.formatear_rut(data_ruc)])
+            partner_exist = self.env["res.partner"].search([('document_number','=',self.formatear_rut(data_ruc))])
             if len(partner_exist)==0:
                 # Si el cliente no existe, lo creo
                 obj={}
