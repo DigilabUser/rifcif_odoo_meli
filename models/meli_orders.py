@@ -211,7 +211,7 @@ class MercadolibreOrders(models.Model):
             data_street =  data_stree_name + " " + data_stree_number
 
             #Busco al cliente
-            partner_exist = self.env["res.partner"].search([('vat','=',number_doc)])
+            partner_exist = self.env["res.partner"].search([('document_number','=',number_doc)])
             if len(partner_exist)==0:
                 # Si el cliente no existe, lo creo
                 obj={}
@@ -221,8 +221,11 @@ class MercadolibreOrders(models.Model):
                 obj["street"]=data_street
                 obj["l10n_cl_sii_taxpayer_type"]='1' if meli_order['type_doc']=='factura' else '3'
                 obj["customer_rank"]=1
-                new_partner = self.env['res.partner'].sudo().create(obj)
-                partner_exist = new_partner
+                try:
+                    new_partner = self.env['res.partner'].sudo().create(obj)
+                    partner_exist = new_partner
+                except:
+                    pass
             # aca voy a crear mi orden de venta
             obj={}
             obj['partner_id']=partner_exist['id']
