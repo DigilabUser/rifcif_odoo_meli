@@ -226,31 +226,31 @@ class MercadolibreOrders(models.Model):
                     partner_exist = new_partner
                 except:
                     pass
-            # aca voy a crear mi orden de venta
-            obj={}
-            obj['partner_id']=partner_exist['id']
-            obj['order_ml']=meli_order['ml_order_id']
-            obj['date_order']=meli_order['date_created']
-            obj['amount_total']=meli_order['total_amount']  
-
+ 
             #Verifico si es una meli_orden en paquete
             if(meli_order["pack_id"] == False):
-                #Si no es paquete, creo la orden
-                sale_order = self.env["sale.order"].create(obj)
                 #Creo las lineas de pedido
+                order_lines = []
                 for line in meli_order["item_ids"]:
                     product_id = self.env['product.template'].search([('isbn','=', line['isbn'])])
                     if product_id:
-                        line_vals = {
+                        order_lines.append( (0, 0, { 
                             'order_id': sale_order.id,
                             'product_id': product_id.id,
                             'product_uom_qty': line['quantity'],
                             'price_unit': int(line['unit_price'])*(1.19),
                             'name': line['title'],
                             'display_type': False,
-                            }
-                        print(line_vals)
-                        self.env['sale.order.line'].create(line_vals)
+                        }))
+                # aca voy a crear mi orden de venta
+                obj={}
+                obj['partner_id']=partner_exist['id']
+                obj['order_ml']=meli_order['ml_order_id']
+                obj['date_order']=meli_order['date_created']
+                obj['amount_total']=meli_order['total_amount'] 
+                obj['order_lines']=order_lines
+                #Si no es paquete, creo la orden
+                sale_order = self.env["sale.order"].create(obj)
                 #Busco la orden creada
                 order= self.env['sale.order'].search([('id','=',sale_order.id)])
                 #Actualizo el campo para la trazabilidad
@@ -270,36 +270,38 @@ class MercadolibreOrders(models.Model):
                     ml_order_date_pack = order_pack["date_created"]
                     ml_amount_pack +=order_pack["total_amount"]
                     
-                obj={}
-                obj['partner_id']=partner_exist['id']
-                obj['order_ml']=ml_order_id_pack
-                obj['date_order']=ml_order_date_pack
-                obj['amount_total']=ml_amount_pack  
-                #Creo la orden
-                sale_order = self.env["sale.order"].create(obj)
                 # Recorro las meli_orders con el mismo pack_id para obtener sus items
+                order_lines = []
                 for order_pack in meli_order_pack:
                     #Creo las lineas de pedido
                     for line in order_pack["item_ids"]:
                         product_id = self.env['product.template'].search([('isbn','=', line['isbn'])])
                         if product_id:
-                            line_vals = {
+                            order_lines.append( (0, 0, { 
                                 'order_id': sale_order.id,
                                 'product_id': product_id.id,
                                 'product_uom_qty': line['quantity'],
                                 'price_unit': int(line['unit_price'])*(1.19),
                                 'name': line['title'],
                                 'display_type': False,
-                                }
-                            print(line_vals)
-                            self.env['sale.order.line'].create(line_vals)  
-                    #Busco la orden creada
-                    order= self.env['sale.order'].search([('id','=',sale_order.id)])
-                    #Actualizo el campo para la trazabilidad
-                    order_pack.sudo().write({
-                        'sale_order_id':order.id
-                    })                                              
-                    print(order_pack['item_ids'])
+                            }))
+                obj={}
+                obj['partner_id']=partner_exist['id']
+                obj['order_ml']=ml_order_id_pack
+                obj['date_order']=ml_order_date_pack
+                obj['amount_total']=ml_amount_pack
+                obj['order_lines']=order_lines
+
+                #Creo la orden
+                sale_order = self.env["sale.order"].create(obj)                            
+
+                #Busco la orden creada
+                order= self.env['sale.order'].search([('id','=',sale_order.id)])
+                #Actualizo el campo para la trazabilidad
+                order_pack.sudo().write({
+                    'sale_order_id':order.id
+                })                                              
+                print(order_pack['item_ids'])
             self.create_invoice_from_ml_orders(meli_order)
 
 
