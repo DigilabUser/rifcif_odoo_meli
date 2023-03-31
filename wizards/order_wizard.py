@@ -31,7 +31,21 @@ class MLOrderWizard(models.TransientModel):
 
     date_from = fields.Datetime('Fecha Inicial', default=datetime.now().replace(hour=00, minute=00, second=1)+timedelta(hours=3))
     date_to = fields.Datetime('Fecha Final', default=datetime.now().replace(hour=23, minute=59, second=59)+timedelta(hours=3))
-
+    
+    def formatear_rut(self, rut):
+        """
+        Esta función toma un RUT chileno como una cadena y devuelve el RUT
+        formateado con puntos y guión. Si el RUT es inválido, devuelve None.
+        """
+        rut = rut.replace(".", "").replace("-", "").strip().upper()
+        if not rut.isdigit() or len(rut) < 7:
+            return None
+        dv = rut[-1]
+        cuerpo = rut[:-1]
+        cuerpo_reversed = cuerpo[::-1]
+        cuerpo_con_puntos = ".".join([cuerpo_reversed[i:i+3] for i in range(0, len(cuerpo_reversed), 3)])
+        return f"{cuerpo_con_puntos[::-1]}-{dv}"
+    
     def getImage(self, url):
         '''
         Función que convierte un URL a una imagen en BASE64 para poder guardarla en un 
@@ -134,7 +148,7 @@ class MLOrderWizard(models.TransientModel):
                     obj["paid_amount"]=order["paid_amount"]
                     obj["status"]=order["status"]    
                     obj["type_doc"]=  mostrar_ruc   
-                    obj["rut_user"] = ruc
+                    obj["rut_user"] = self.formatear_rut(ruc)
                     #print(obj)
 
                     order_exist= self.env['meli.order'].search([("ml_order_id","=",obj["ml_order_id"])])
