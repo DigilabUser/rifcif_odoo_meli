@@ -35,6 +35,11 @@
 	   	 	</field>
 	    </record>
 
+		<record model="ir.actions.act_window" id="action_ml_connector">
+	    	<field name="name">MercadoLibre Connector</field>
+	      	<field name="res_model">meli.connector</field>
+	      	<field name="view_mode">tree,form</field>
+	    </record>
 		<record model="ir.actions.act_window" id="action_ml_order">
 	    	<field name="name">MercadoLibre órdenes</field>
 	      	<field name="res_model">meli.order</field>
