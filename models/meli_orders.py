@@ -247,7 +247,7 @@ class MercadolibreOrders(models.Model):
                 obj['order_ml']=meli_order['ml_order_id']
                 obj['date_order']=meli_order['date_created']
                 obj['amount_total']=meli_order['total_amount'] 
-                obj['order_lines']=order_lines
+                obj['order_line']=order_lines
                 #Si no es paquete, creo la orden
                 sale_order = self.env["sale.order"].create(obj)
                 #Busco la orden creada
@@ -288,7 +288,7 @@ class MercadolibreOrders(models.Model):
                 obj['order_ml']=ml_order_id_pack
                 obj['date_order']=ml_order_date_pack
                 obj['amount_total']=ml_amount_pack
-                obj['order_lines']=order_lines
+                obj['order_line']=order_lines
 
                 #Creo la orden
                 sale_order = self.env["sale.order"].create(obj)                            
