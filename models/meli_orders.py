@@ -156,15 +156,10 @@ class MercadolibreOrders(models.Model):
             obj['amount_untaxed']=meli_order_id["sale_order_id"]['amount_total']
             obj['meli_order_id']=meli_order_id["id"]
             obj['invoice_line_ids']= move_lines #Coloco las lineas de factura aca
-            print(obj)
             #Creo mi orden
             order_id=self.env["account.move"].sudo().create(obj)
             meli_order_id.write({'move_id':order_id.id})
              
-
-
-
-
 
     def create_sale_order_from_meli_order(self):
 
@@ -186,7 +181,7 @@ class MercadolibreOrders(models.Model):
             json_billing= self.get_data_from_api(url_billing, header)    
 
             number_doc = json_billing["billing_info"]["doc_number"]
-            meli_order.write({'rut_user':number_doc})
+            meli_order.write({'rut_user':self.formatear_rut(number_doc)})
 
             # Variables locales
             data_name = ""
@@ -218,11 +213,10 @@ class MercadolibreOrders(models.Model):
                 obj={}
                 obj["name"]=data_name
                 obj["vat"]=self.formatear_rut(data_ruc)
-                obj["document_number"]=data_ruc
+                obj["document_number"]=self.formatear_rut(data_ruc)
                 obj["street"]=data_street
                 obj["l10n_cl_sii_taxpayer_type"]='1' if meli_order['type_doc']=='factura' else '3'
                 obj["customer_rank"]=1
-                _logger.info("====================%s",obj)
                 new_partner = self.env['res.partner'].sudo().create(obj)
                 partner_exist = new_partner
             # aca voy a crear mi orden de venta

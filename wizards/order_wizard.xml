@@ -13,6 +13,7 @@
 
                 <footer>
                     <button name="syncOrders" type="object" string="Sincronizar" class="oe_highligth" />
+                    <button name="syncAll" type="object" string="Sincronización Total" class="oe_highligth" />
                     <button name="cancel" string="Cancelar" />
                 </footer>
             </form>
