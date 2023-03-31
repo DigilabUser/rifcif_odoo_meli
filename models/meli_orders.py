@@ -84,7 +84,7 @@ class MercadolibreOrders(models.Model):
     type_doc = fields.Char('Tipo de documento')
     rut_user = fields.Char('Rut')
 
-    def formatear_rut(rut):
+    def formatear_rut(self,rut):
         """
         Esta función toma un RUT chileno como una cadena y devuelve el RUT
         formateado con puntos y guión. Si el RUT es inválido, devuelve None.
