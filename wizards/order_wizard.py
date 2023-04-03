@@ -153,90 +153,93 @@ class MLOrderWizard(models.TransientModel):
 
                     order_exist= self.env['meli.order'].search([("ml_order_id","=",obj["ml_order_id"])])
                     if len(order_exist)==0:
-                        res = self.env["meli.order"].sudo().create(obj)
-                        #Aca me traigo los items
-                        for item in order["order_items"]:
-                            print("ITEM={}".format(item))
-                            url_item = ITEM_URI.format(item["item"]["id"])
-                            response_item = requests.get(url_item, headers=header)
-                            json_item = json.loads(response_item.text)
-                            #obtengo el ISBN
-                            isbn = ""
-                            lang = ""
-                            cond = ""
-                            max_age = "" 
-                            height = ""
-                            weight = ""
-                            publi = ""
-                            for rec in json_item["attributes"]:
-                                if rec["id"] == "GTIN":
-                                    isbn=rec["value_name"]
-                                if rec["id"] == "LANGUAGE":
-                                    lang = rec["value_name"]
-                                if rec["id"] == "ITEM_CONDITION":
-                                    cond = rec["value_name"] 
-                                if rec["id"] == "MAX_RECOMMENDED_AGE":
-                                    max_age = rec["value_name"]
-                                if rec["id"] == "PACKAGE_HEIGHT":
-                                    height = rec["value_name"]
-                                if rec["id"] == "PACKAGE_WEIGHT":
-                                    weight = rec["value_name"]
-                                if rec["id"] == "PUBLICATION_YEAR":
-                                    publi = rec["value_name"]
-                                
-                            print(json_item)
-                            obj_item={}
-                            obj_item["order_id"] = res.id
-                            obj_item["title"] = item["item"]["title"]
-                            obj_item["item_id"] = item["item"]["id"]
-                            obj_item["isbn"] = isbn
-                            obj_item["quantity"]=item["quantity"]
-                            obj_item["sale_fee"]=item["sale_fee"]
-                            obj_item["listing_type"]=item["listing_type_id"]
-                            obj_item["unit_price"]=item["unit_price"]
-                            obj_item["full_unit_price"]=item["full_unit_price"]
-                            obj_item["base_exchange_rate"]=item["base_exchange_rate"]
-                            obj_item["currency_id"]=item["currency_id"]
-                            #categoria
-                            obj_item['category_id'] = json_item['category_id']
-                            #iventario
-                            obj_item['inventory_id']=json_item['inventory_id']
-                            #geolocalizacion
-                            obj_item["geolocation"]="https://www.google.com/maps/@{},{},15z".format(str(json_item["geolocation"]["latitude"]), str(json_item["geolocation"]["longitude"]))
-                            #permalink
-                            obj_item['permalink']=json_item['permalink']
-                            #condicion orden[22]
-                            obj_item['condition']=cond
-                            #Idioma orden[23]
-                            obj_item['language']=lang
-                            #Edad maxima recomendada orden[25]
-                            obj_item['max_recommended_age']=max_age
-                            #Altura del paquete orden[28]
-                            obj_item['package_height']=height
-                            #Peso del paquete orden[30]
-                            obj_item['package_weight']=weight
-                            #Año de publicación orden[34]
-                            obj_item['publication_year']=publi
-                            #Garantia
-                            obj_item['warranty'] = json_item['warranty']
-                            #Aca Crea
-                            obj_item["shipping_cost"]=(int(order["paid_amount"]) - int(order["total_amount"]))/(1.19)
-                            obj_item["paid_amount"]=order["paid_amount"]
 
-                            self.env["meli.order.items"].sudo().create(obj_item)
-                        for payment in order["payments"]:
-                            obj_payment={}
-                            obj_payment["order_id"] = res.id
-                            obj_payment["reason"] = payment["reason"]
-                            obj_payment["status_code"] = payment["status_code"]
-                            obj_payment["total_paid_amount"]=payment["total_paid_amount"]
-                            obj_payment["operation_type"]=payment["operation_type"]
-                            obj_payment["transaction_amount"]=payment["transaction_amount"]
-                            obj_payment["collector_id"]=payment["collector"]["id"]
-                            obj_payment["payment_id"]=payment["id"]
-                            obj_payment["shipping_cost"]=payment["shipping_cost"]
-                            obj_payment["currency_id"]=payment["currency_id"]
-                            self.env["meli.order.payments"].sudo().create(obj_payment)
+                        if obj["total_amount"] > 0: 
+                            res = self.env["meli.order"].sudo().create(obj)
+                            
+                            #Aca me traigo los items
+                            for item in order["order_items"]:
+                                print("ITEM={}".format(item))
+                                url_item = ITEM_URI.format(item["item"]["id"])
+                                response_item = requests.get(url_item, headers=header)
+                                json_item = json.loads(response_item.text)
+                                #obtengo el ISBN
+                                isbn = ""
+                                lang = ""
+                                cond = ""
+                                max_age = "" 
+                                height = ""
+                                weight = ""
+                                publi = ""
+                                for rec in json_item["attributes"]:
+                                    if rec["id"] == "GTIN":
+                                        isbn=rec["value_name"]
+                                    if rec["id"] == "LANGUAGE":
+                                        lang = rec["value_name"]
+                                    if rec["id"] == "ITEM_CONDITION":
+                                        cond = rec["value_name"] 
+                                    if rec["id"] == "MAX_RECOMMENDED_AGE":
+                                        max_age = rec["value_name"]
+                                    if rec["id"] == "PACKAGE_HEIGHT":
+                                        height = rec["value_name"]
+                                    if rec["id"] == "PACKAGE_WEIGHT":
+                                        weight = rec["value_name"]
+                                    if rec["id"] == "PUBLICATION_YEAR":
+                                        publi = rec["value_name"]
+                                    
+                                print(json_item)
+                                obj_item={}
+                                obj_item["order_id"] = res.id
+                                obj_item["title"] = item["item"]["title"]
+                                obj_item["item_id"] = item["item"]["id"]
+                                obj_item["isbn"] = isbn
+                                obj_item["quantity"]=item["quantity"]
+                                obj_item["sale_fee"]=item["sale_fee"]
+                                obj_item["listing_type"]=item["listing_type_id"]
+                                obj_item["unit_price"]=item["unit_price"]
+                                obj_item["full_unit_price"]=item["full_unit_price"]
+                                obj_item["base_exchange_rate"]=item["base_exchange_rate"]
+                                obj_item["currency_id"]=item["currency_id"]
+                                #categoria
+                                obj_item['category_id'] = json_item['category_id']
+                                #iventario
+                                obj_item['inventory_id']=json_item['inventory_id']
+                                #geolocalizacion
+                                obj_item["geolocation"]="https://www.google.com/maps/@{},{},15z".format(str(json_item["geolocation"]["latitude"]), str(json_item["geolocation"]["longitude"]))
+                                #permalink
+                                obj_item['permalink']=json_item['permalink']
+                                #condicion orden[22]
+                                obj_item['condition']=cond
+                                #Idioma orden[23]
+                                obj_item['language']=lang
+                                #Edad maxima recomendada orden[25]
+                                obj_item['max_recommended_age']=max_age
+                                #Altura del paquete orden[28]
+                                obj_item['package_height']=height
+                                #Peso del paquete orden[30]
+                                obj_item['package_weight']=weight
+                                #Año de publicación orden[34]
+                                obj_item['publication_year']=publi
+                                #Garantia
+                                obj_item['warranty'] = json_item['warranty']
+                                #Aca Crea
+                                obj_item["shipping_cost"]=(int(order["paid_amount"]) - int(order["total_amount"]))/(1.19)
+                                obj_item["paid_amount"]=order["paid_amount"]
+
+                                self.env["meli.order.items"].sudo().create(obj_item)
+                            for payment in order["payments"]:
+                                obj_payment={}
+                                obj_payment["order_id"] = res.id
+                                obj_payment["reason"] = payment["reason"]
+                                obj_payment["status_code"] = payment["status_code"]
+                                obj_payment["total_paid_amount"]=payment["total_paid_amount"]
+                                obj_payment["operation_type"]=payment["operation_type"]
+                                obj_payment["transaction_amount"]=payment["transaction_amount"]
+                                obj_payment["collector_id"]=payment["collector"]["id"]
+                                obj_payment["payment_id"]=payment["id"]
+                                obj_payment["shipping_cost"]=payment["shipping_cost"]
+                                obj_payment["currency_id"]=payment["currency_id"]
+                                self.env["meli.order.payments"].sudo().create(obj_payment)
 
                         counter +=1
                         print(counter)
